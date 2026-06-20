@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursion & Backtracking — FAANG Mastery Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #0d1117;
+  --surface:     #161b22;
+  --surface2:    #1c2128;
+  --surface3:    #21262d;
+  --border:      #30363d;
+  --text:        #e6edf3;
+  --muted:       #8b949e;
+  --dim:         #484f58;
+
+  --state:       #58a6ff;
+  --state-bg:    rgba(88,166,255,0.08);
+  --state-bd:    rgba(88,166,255,0.25);
+
+  --decision:    #ff7b72;
+  --decision-bg: rgba(255,123,114,0.08);
+  --decision-bd: rgba(255,123,114,0.25);
+
+  --trans:       #d2a8ff;
+  --trans-bg:    rgba(210,168,255,0.08);
+  --trans-bd:    rgba(210,168,255,0.25);
+
+  --base:        #7ee787;
+  --base-bg:     rgba(126,231,135,0.08);
+  --base-bd:     rgba(126,231,135,0.25);
+
+  --prune:       #ffa657;
+  --prune-bg:    rgba(255,166,87,0.08);
+  --prune-bd:    rgba(255,166,87,0.25);
+
+  --gold:        #e3b341;
+  --silver:      #adbac7;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── SIDEBAR ─────────────────────────────────── */
+.sidebar {
+  width: 255px;
+  min-height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 28px 14px 40px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-brand {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--gold);
+  padding: 0 8px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12.5px;
+  transition: all .15s;
+  margin-bottom: 1px;
+}
+.sidebar a:hover, .sidebar a.active {
+  color: var(--text);
+  background: var(--surface3);
+}
+.sidebar a .num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  margin-right: 6px;
+}
+
+.sdtb-legend {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.sdtb-legend .leg-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 0 10px;
+  margin-bottom: 8px;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.leg-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── MAIN ─────────────────────────────────────── */
+main {
+  flex: 1;
+  padding: 52px 64px 80px;
+  max-width: 960px;
+  overflow-x: hidden;
+}
+
+/* ─── HERO ─────────────────────────────────────── */
+.hero { margin-bottom: 72px; }
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--state);
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1.08;
+  margin-bottom: 18px;
+  background: linear-gradient(130deg, var(--text) 0%, var(--silver) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  color: var(--muted);
+  font-size: 15.5px;
+  max-width: 580px;
+  line-height: 1.65;
+}
+
+/* ─── SECTIONS ─────────────────────────────────── */
+section { margin-bottom: 88px; scroll-margin-top: 32px; }
+
+.sec-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 36px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sec-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--dim);
+}
+.sec-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  margin: 32px 0 12px;
+  color: var(--text);
+}
+h4 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  margin: 22px 0 8px;
+  color: var(--text);
+}
+p { margin-bottom: 13px; }
+p:last-child { margin-bottom: 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 5px; }
+
+strong { color: var(--text); font-weight: 600; }
+
+/* ─── CALLOUTS ──────────────────────────────────── */
+.callout {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 18px 0;
+  border-left: 3px solid;
+}
+.callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.callout.s { background:var(--state-bg); border-color:var(--state); }
+.callout.s .callout-label { color:var(--state); }
+.callout.d { background:var(--decision-bg); border-color:var(--decision); }
+.callout.d .callout-label { color:var(--decision); }
+.callout.t { background:var(--trans-bg); border-color:var(--trans); }
+.callout.t .callout-label { color:var(--trans); }
+.callout.b { background:var(--base-bg); border-color:var(--base); }
+.callout.b .callout-label { color:var(--base); }
+.callout.p { background:var(--prune-bg); border-color:var(--prune); }
+.callout.p .callout-label { color:var(--prune); }
+.callout.gold { background:rgba(227,179,65,0.07); border-color:var(--gold); }
+.callout.gold .callout-label { color:var(--gold); }
+
+/* ─── CODE ──────────────────────────────────────── */
+pre {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+  overflow-x: auto;
+  margin: 14px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.8;
+  tab-size: 4;
+}
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  background: var(--surface3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--gold);
+}
+.c-state  { color: var(--state); }
+.c-dec    { color: var(--decision); }
+.c-trans  { color: var(--trans); }
+.c-base   { color: var(--base); }
+.c-prune  { color: var(--prune); }
+.c-cmt    { color: var(--muted); font-style: italic; }
+.c-kw     { color: #ff7b72; }
+.c-str    { color: #a5d6ff; }
+.c-num    { color: #79c0ff; }
+
+/* ─── TABLES ─────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; margin: 18px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--surface3);
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.6;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ─── TREE DIAGRAMS ──────────────────────────────── */
+.tree {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 16px 0;
+}
+.t-node  { color: var(--state); }
+.t-edge  { color: var(--dim); }
+.t-ok    { color: var(--base); }
+.t-prune { color: var(--decision); }
+.t-idx   { color: var(--trans); }
+
+/* ─── PATTERN CARD ───────────────────────────────── */
+.pattern-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 28px 0;
+  overflow: hidden;
+}
+.pattern-card-head {
+  background: var(--surface2);
+  padding: 13px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.pat-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.pat-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+}
+.pat-tag {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.pattern-card-body { padding: 20px; }
+
+/* ─── SDTB STRIP ─────────────────────────────────── */
+.sdtb-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.sdtb-item {
+  border-radius: 7px;
+  padding: 12px 14px;
+  border: 1px solid;
+}
+.sdtb-item.s { background:var(--state-bg); border-color:var(--state-bd); }
+.sdtb-item.d { background:var(--decision-bg); border-color:var(--decision-bd); }
+.sdtb-item.t { background:var(--trans-bg); border-color:var(--trans-bd); }
+.sdtb-item.b { background:var(--base-bg); border-color:var(--base-bd); }
+.sdtb-item .sdtb-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
+}
+.sdtb-item.s .sdtb-lbl { color:var(--state); }
+.sdtb-item.d .sdtb-lbl { color:var(--decision); }
+.sdtb-item.t .sdtb-lbl { color:var(--trans); }
+.sdtb-item.b .sdtb-lbl { color:var(--base); }
+.sdtb-item p { font-size: 13px; margin:0; }
+
+/* ─── MISTAKE CARD ───────────────────────────────── */
+.mistake-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 22px 0;
+  overflow: hidden;
+}
+.mistake-head {
+  background: rgba(255,123,114,0.07);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mk-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--decision);
+  background: rgba(255,123,114,0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.mk-title { font-weight: 600; color: var(--decision); font-size: 14.5px; }
+.mistake-body { padding: 20px; }
+.fix-box {
+  background: var(--base-bg);
+  border: 1px solid var(--base-bd);
+  border-radius: 7px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 13.5px;
+}
+.fix-box-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--base);
+  margin-bottom: 6px;
+}
+.mental-box {
+  background: rgba(227,179,65,0.07);
+  border: 1px solid rgba(227,179,65,0.2);
+  border-radius: 7px;
+  padding: 12px 16px;
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--gold);
+}
+
+/* ─── DECISION FLOW TREE ─────────────────────────── */
+.dflow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 20px 0;
+}
+.dflow-q {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+.dq-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+.dq-text { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+.dq-branches { display: flex; gap: 10px; flex-wrap: wrap; }
+.dq-branch {
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  border: 1px solid;
+}
+.dq-branch.yes { background:var(--base-bg); border-color:var(--base-bd); color:var(--base); }
+.dq-branch.no  { background:var(--decision-bg); border-color:var(--decision-bd); color:var(--decision); }
+.dq-branch.maybe { background:var(--trans-bg); border-color:var(--trans-bd); color:var(--trans); }
+.dflow-arrow {
+  text-align: center;
+  color: var(--dim);
+  font-size: 18px;
+  padding: 4px 0;
+}
+
+/* ─── TEMPLATE CARD ──────────────────────────────── */
+.tpl-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 24px 0;
+  overflow: hidden;
+}
+.tpl-head {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tpl-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+.tpl-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: auto;
+}
+.tpl-body { padding: 20px; }
+
+/* ─── CHEAT SHEET ────────────────────────────────── */
+.cheat {
+  background: var(--surface);
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 32px;
+}
+.cheat-section { margin-bottom: 28px; }
+.cheat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+  display: block;
+}
+.cheat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.cheat-pill {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.cheat-pill-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* ─── QUOTE ──────────────────────────────────────── */
+.big-quote {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  border-left: 3px solid var(--gold);
+  padding: 12px 20px;
+  margin: 24px 0;
+  background: rgba(227,179,65,0.05);
+  border-radius: 0 8px 8px 0;
+  line-height: 1.4;
+}
+
+/* ─── GRID HELPERS ───────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.chip {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--surface3);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  margin: 2px 2px 2px 0;
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 820px) {
+  .sidebar { display: none; }
+  main { padding: 24px 18px 60px; }
+  .sdtb-strip { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .cheat-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
+<nav class="sidebar">
+  <div class="sidebar-brand">📚 Recursion &amp; Backtracking</div>
+  <a href="#s1"><span class="num">01</span>Your Level</a>
+  <a href="#s2"><span class="num">02</span>The 4 Foundations</a>
+  <a href="#s3"><span class="num">03</span>Recursion Tree Thinking</a>
+  <a href="#s4"><span class="num">04</span>Pattern Classification</a>
+  <a href="#s5"><span class="num">05</span>Backtracking Roadmap</a>
+  <a href="#s6"><span class="num">06</span>Your Personal Mistakes</a>
+  <a href="#s7"><span class="num">07</span>Identify the Pattern</a>
+  <a href="#s8"><span class="num">08</span>Pruning</a>
+  <a href="#s9"><span class="num">09</span>Template Library</a>
+  <a href="#s10"><span class="num">10</span>Interview Mindset</a>
+  <a href="#s11"><span class="num">11</span>Revision Cheat Sheet</a>
+
+  <div class="sdtb-legend">
+    <div class="leg-label">Color System</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--state)"></div> STATE</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--decision)"></div> DECISION</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--trans)"></div> TRANSITION</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--base)"></div> BASE CASE</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--prune)"></div> PRUNING</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ══════════════════════════════ -->
+<main>
+
+<!-- ──── HERO ──── -->
+<div class="hero">
+  <div class="hero-eyebrow">Google / FAANG Interview Prep · Recursion &amp; Backtracking</div>
+  <h1>Think in States,<br>Not in Code</h1>
+  <p class="hero-sub">A complete practical learning guide engineered for your specific weaknesses. Every section teaches thinking, not syntax. Internalize the STATE → DECISION → TRANSITION → BASE CASE framework and solve any unseen problem independently.</p>
+</div>
+
+<!-- ════════════════ S1: YOUR LEVEL ════════════════ -->
+<section id="s1">
+  <div class="sec-header">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">Your Level Assessment</h2>
+  </div>
+
+  <div class="two-col">
+    <div class="callout b">
+      <div class="callout-label">✓ What You Already Know</div>
+      <ul>
+        <li>Python fluency</li>
+        <li>Basic recursion syntax and flow</li>
+        <li>append/pop backtracking mechanics</li>
+        <li>Simple recursion (factorial, fibonacci, basic tree traversal)</li>
+      </ul>
+    </div>
+    <div class="callout d">
+      <div class="callout-label">⚠ Your Core Gaps</div>
+      <ul>
+        <li>Visualizing state at each recursion node</li>
+        <li>Building recursion trees mentally</li>
+        <li>Identifying the correct state variables</li>
+        <li>Seeing decisions clearly</li>
+        <li>Determining state transitions</li>
+        <li>Choosing between patterns</li>
+        <li>Pruning intuition</li>
+        <li>Advanced backtracking problems</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <div class="callout-label">The Real Problem</div>
+    <p>You're thinking about <em>execution</em>. You're tracing through code line-by-line, following the call stack in your head. Strong recursive thinkers don't do this. They think about the <strong>state-space</strong> — a tree of possibilities — and write code that explores it.</p>
+    <p>This guide rewires that mental model. Every section reinforces the same four concepts: <strong style="color:var(--state)">STATE</strong> · <strong style="color:var(--decision)">DECISION</strong> · <strong style="color:var(--trans)">TRANSITION</strong> · <strong style="color:var(--base)">BASE CASE</strong>.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════ S2: 4 FOUNDATIONS ════════════════ -->
+<section id="s2">
+  <div class="sec-header">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">The 4 Foundations</h2>
+  </div>
+
+  <div class="big-quote">Every recursion problem, without exception, reduces to four questions: What is my state? What are my decisions? How does state change? When do I stop?</div>
+
+  <!-- STATE -->
+  <h3 style="color:var(--state)">① STATE</h3>
+
+  <div class="callout s">
+    <div class="callout-label">Definition</div>
+    <p><strong>State is the complete snapshot of information at a single recursion node.</strong> It is everything a function call needs to make its decisions — without knowing anything about parent calls or future calls.</p>
+  </div>
+
+  <p><strong>Why it matters:</strong> State directly determines your function's parameters. If you don't identify state correctly, your function will either carry too little information (wrong answers) or too much (over-complicated logic).</p>
+
+  <p><strong>The test:</strong> If I give you only the state at a node, can you independently decide what to do next? If yes, the state is correct. If you need to know what the parent did, your state is incomplete.</p>
+
+  <h4>State Examples Across Problems</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Problem</th><th>State Variables</th><th>Meaning</th></tr>
+    <tr>
+      <td>Subsets([1,2,3])</td>
+      <td><code>idx=1, current=[1]</code></td>
+      <td>Processed index 0 (included 1), now deciding about index 1 onwards</td>
+    </tr>
+    <tr>
+      <td>Combination Sum([2,3,6,7], 7)</td>
+      <td><code>idx=0, rem=5, current=[2]</code></td>
+      <td>At index 0 again, need 5 more, have [2] so far</td>
+    </tr>
+    <tr>
+      <td>N-Queens (N=4)</td>
+      <td><code>row=2, cols={0,2}, diag1={-2,1}</code></td>
+      <td>Placing row 2, columns 0 and 2 already used in previous rows</td>
+    </tr>
+    <tr>
+      <td>Sudoku Solver</td>
+      <td><code>(r=1, c=3, board=partial)</code></td>
+      <td>Filling cell (1,3), board has some digits placed</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="callout d">
+    <div class="callout-label">Beginner Mistake</div>
+    <p>Treating <code>idx</code> as a loop counter. The index in recursion is <strong>part of the state</strong> — it represents "which choices are still available to me." This is a fundamentally different mental model.</p>
+  </div>
+
+  <div class="callout gold">
+    <div class="callout-label">Interviewer POV</div>
+    <p>When you say "Let me think about what my function needs to know at each call" before writing any code, interviewers recognize this as senior-level thinking. State identification IS the algorithm.</p>
+  </div>
+
+  <!-- DECISION -->
+  <h3 style="color:var(--decision)">② DECISION</h3>
+
+  <div class="callout d">
+    <div class="callout-label">Definition</div>
+    <p><strong>A decision is the set of choices available from the current state.</strong> Each choice spawns a new branch in the recursion tree — a child node.</p>
+  </div>
+
+  <p><strong>Why it matters:</strong> The decisions determine the shape of your recursion tree. Two decisions = binary tree. N decisions = N-ary tree. Identifying decisions precisely tells you how many recursive calls you make and what loop structure (if any) you need.</p>
+
+  <h4>Decision Examples</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Problem</th><th>Decisions at Each Node</th><th>Tree Branching</th></tr>
+    <tr>
+      <td>Subsets</td>
+      <td>Include nums[idx] OR exclude nums[idx]</td>
+      <td>Binary (2 branches)</td>
+    </tr>
+    <tr>
+      <td>Combination Sum I</td>
+      <td>Skip current element OR take it (possibly again)</td>
+      <td>Binary (but with index behavior difference)</td>
+    </tr>
+    <tr>
+      <td>Combination Sum II</td>
+      <td>For each position i from start to end, try nums[i]</td>
+      <td>Loop-based (up to N branches)</td>
+    </tr>
+    <tr>
+      <td>N-Queens</td>
+      <td>Place queen in column 0, 1, 2, ..., N-1 of current row</td>
+      <td>N branches (filtered by constraints)</td>
+    </tr>
+    <tr>
+      <td>Sudoku</td>
+      <td>Place digit 1–9 in the current empty cell</td>
+      <td>Up to 9 branches (filtered by constraints)</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="callout d">
+    <div class="callout-label">Beginner Mistake</div>
+    <p>Difficulty identifying decisions usually comes from thinking "what does the code do?" instead of "what choices does this problem offer?" Step back. Ask: at this moment in the problem, what are my options? List them. Those are your decisions.</p>
+  </div>
+
+  <!-- TRANSITION -->
+  <h3 style="color:var(--trans)">③ TRANSITION</h3>
+
+  <div class="callout t">
+    <div class="callout-label">Definition</div>
+    <p><strong>A transition describes how state changes when you make a particular decision.</strong> It defines what arguments you pass to the next recursive call — and what you undo when backtracking.</p>
+  </div>
+
+  <p><strong>Why it matters:</strong> Transitions ARE your recursive calls. Once you know "if I make decision X, state becomes Y," writing the recursive call is mechanical. The undo of a transition is backtracking.</p>
+
+  <h4>Transition Examples</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Problem</th><th>Decision</th><th>New State (Transition)</th><th>Undo (Backtrack)</th></tr>
+    <tr>
+      <td>Subsets</td>
+      <td>Include nums[idx]</td>
+      <td><code>idx+1, current+[nums[idx]]</code></td>
+      <td><code>current.pop()</code></td>
+    </tr>
+    <tr>
+      <td>Subsets</td>
+      <td>Exclude nums[idx]</td>
+      <td><code>idx+1, current unchanged</code></td>
+      <td>Nothing to undo</td>
+    </tr>
+    <tr>
+      <td>Combination Sum I</td>
+      <td>Take nums[idx]</td>
+      <td><code>same idx, rem - nums[idx], current+[nums[idx]]</code></td>
+      <td><code>current.pop()</code></td>
+    </tr>
+    <tr>
+      <td>N-Queens</td>
+      <td>Place queen at (row, col)</td>
+      <td><code>row+1, cols+{col}, diag1+{row-col}, diag2+{row+col}</code></td>
+      <td>Remove from all sets</td>
+    </tr>
+    <tr>
+      <td>Sudoku</td>
+      <td>Place digit d at (r,c)</td>
+      <td><code>next empty cell, board[r][c]=d</code></td>
+      <td><code>board[r][c]=0</code></td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="callout d">
+    <div class="callout-label">Beginner Mistake</div>
+    <p>Confusing <em>validation</em> with <em>state modification</em>. Checking "is this decision valid?" is not a transition — it's a guard before the transition. Modifying the state IS the transition. These two things belong in separate places in your code.</p>
+  </div>
+
+  <!-- BASE CASE -->
+  <h3 style="color:var(--base)">④ BASE CASE</h3>
+
+  <div class="callout b">
+    <div class="callout-label">Definition</div>
+    <p><strong>The base case is the condition that stops recursion.</strong> There are two types: a <em>success</em> base case (record a result) and a <em>failure</em> base case (prune / return without recording).</p>
+  </div>
+
+  <p><strong>Why it matters:</strong> Without a correct base case, recursion runs forever or misses results. Your base case defines what "done" looks like for your problem.</p>
+
+  <h4>Base Case Examples</h4>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Problem</th><th>Success Condition</th><th>Failure Condition</th></tr>
+    <tr>
+      <td>Subsets</td>
+      <td><code>idx == len(nums)</code> → append current to results</td>
+      <td>N/A (every path is valid)</td>
+    </tr>
+    <tr>
+      <td>Combination Sum I</td>
+      <td><code>rem == 0</code> → append current to results</td>
+      <td><code>rem &lt; 0</code> or <code>idx >= len(nums)</code></td>
+    </tr>
+    <tr>
+      <td>N-Queens</td>
+      <td><code>row == n</code> → append board layout</td>
+      <td>Constraint violation before recursive call (pruned)</td>
+    </tr>
+    <tr>
+      <td>Sudoku</td>
+      <td>No empty cells remain → return True</td>
+      <td>No digit 1-9 is valid for current cell → return False</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="callout gold">
+    <div class="callout-label">The Master Formula</div>
+    <p>Every recursion / backtracking problem = define STATE → enumerate DECISIONS → compute TRANSITION for each → check BASE CASE at start of function. Write in this order before touching code.</p>
+  </div>
+
+  <h3>Full Example: Subsets Decomposed</h3>
+  <div class="sdtb-strip">
+    <div class="sdtb-item s">
+      <span class="sdtb-lbl">State</span>
+      <p><code>(idx, current_subset)</code><br>idx = which element we're deciding about now. current_subset = elements chosen so far.</p>
+    </div>
+    <div class="sdtb-item d">
+      <span class="sdtb-lbl">Decision</span>
+      <p>Two choices: <strong>include</strong> nums[idx] in current_subset, OR <strong>exclude</strong> it.</p>
+    </div>
+    <div class="sdtb-item t">
+      <span class="sdtb-lbl">Transition</span>
+      <p>Include: <code>idx+1</code>, <code>current + [nums[idx]]</code><br>Exclude: <code>idx+1</code>, <code>current unchanged</code></p>
+    </div>
+    <div class="sdtb-item b">
+      <span class="sdtb-lbl">Base Case</span>
+      <p><code>idx == len(nums)</code> → every element decided. Record current_subset. Return.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════ S3: RECURSION TREE THINKING ════════════════ -->
+<section id="s3">
+  <div class="sec-header">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">Recursion Tree Thinking</h2>
+  </div>
+
+  <div class="big-quote">Recursion is not code execution. Recursion is state-space exploration. Your recursive function does not "run" — it navigates a tree of states.</div>
+
+  <h3>The Mental Model Shift</h3>
+  <div class="two-col">
+    <div class="callout d">
+      <div class="callout-label">Weak Thinker (Code Execution)</div>
+      <p>"When I call backtrack(1, [1]), then inside that function it calls backtrack(2, [1,2]) and also backtrack(2, [1])..."</p>
+      <p>This person is mentally executing code. They get lost after 2-3 levels of recursion.</p>
+    </div>
+    <div class="callout b">
+      <div class="callout-label">Strong Thinker (State-Space)</div>
+      <p>"The tree has nodes representing states. From state (idx=1, [1]), I have two children: (idx=2, [1,2]) and (idx=2, [1]). All paths from root to leaf are my answers."</p>
+      <p>This person sees the shape. They can reason about the problem without tracing.</p>
+    </div>
+  </div>
+
+  <h3>The Three Rules of Recursion Trees</h3>
+  <div class="callout s">
+    <div class="callout-label">Rule 1: Nodes = States</div>
+    <p>Each function call is a node. The node label is the complete state at that call. You should be able to read the node and know exactly where you are in the problem.</p>
+  </div>
+  <div class="callout d">
+    <div class="callout-label">Rule 2: Edges = Decisions</div>
+    <p>Edges connect parent states to child states. Each edge is labeled with the decision made. The number of edges from a node = number of choices at that state.</p>
+  </div>
+  <div class="callout t">
+    <div class="callout-label">Rule 3: Paths from Root to Leaf = Exploration History</div>
+    <p>Each path from root to any leaf node tells you the sequence of decisions made. Leaf nodes that satisfy the success base case are your answers.</p>
+  </div>
+
+  <!-- SUBSETS TREE -->
+  <h3>Recursion Tree: Subsets([1, 2])</h3>
+  <p>State format: <strong style="color:var(--state)">(idx, current)</strong> · Edges labeled with decision · Green leaves = results collected</p>
+<div class="tree">
+<span class="t-node">                    (idx=0, current=[])</span>
+<span class="t-edge">                      /              \</span>
+<span class="t-edge">                 include 1         exclude 1</span>
+<span class="t-edge">                    /                    \</span>
+<span class="t-node">           (idx=1, [1])              (idx=1, [])</span>
+<span class="t-edge">              /       \               /         \</span>
+<span class="t-edge">         incl 2    excl 2        incl 2      excl 2</span>
+<span class="t-edge">           /           \           /               \</span>
+<span class="t-node">    (idx=2,[1,2])   (idx=2,[1])  (idx=2,[2])   (idx=2,[])</span>
+<span class="t-ok">       ✓[1,2]         ✓[1]         ✓[2]          ✓[]</span>
+<span class="t-edge">    (base case)    (base case)  (base case)  (base case)</span>
+
+<span class="c-cmt">
+  Observations:
+  - Every path from root → leaf produces one subset (including empty set)
+  - Total leaves = 2^n = 2^2 = 4 subsets
+  - No pruning needed: all leaves are valid results
+  - Binary branching: the "take or not take" structure</span>
+</div>
+
+  <!-- COMBINATION SUM TREE -->
+  <h3>Recursion Tree: Combination Sum([2, 3], target=5)</h3>
+  <p>State format: <strong style="color:var(--state)">(idx, rem, current)</strong> · Red nodes = pruned (rem &lt; 0 or idx out of range) · Green = result</p>
+<div class="tree">
+<span class="t-node">                   (idx=0, rem=5, [])</span>
+<span class="t-edge">                    /            \</span>
+<span class="t-edge">               take 2          skip 2 (idx→1)</span>
+<span class="t-edge">                /                   \</span>
+<span class="t-node">      (idx=0, rem=3, [2])        (idx=1, rem=5, [])</span>
+<span class="t-edge">          /        \                /         \</span>
+<span class="t-edge">      take 2    skip 2→idx1    take 3      skip 3→idx2</span>
+<span class="t-edge">        /            \           /                \</span>
+<span class="t-node">  (idx=0,rem=1,[2,2]) (idx=1,rem=3,[2])  (idx=1,rem=2,[3])  (idx=2,rem=5,[])</span>
+<span class="t-edge">     /       \         /       \              /      \          |</span>
+<span class="t-edge"> take 2   skip→idx1 take3  skip→idx2    take3   skip→out   out of bounds</span>
+<span class="t-prune">  rem=-1✗         </span><span class="t-ok">  ✓[2,3]</span><span class="t-prune">  rem=-1✗</span><span class="t-prune">               ✗</span>
+<span class="t-prune">  (pruned)                     (pruned)          </span><span class="t-ok">         rem=5→out✗</span>
+
+<span class="c-cmt">
+  Observations:
+  - Taking the same element (idx stays the same) is what allows repetition
+  - Skipping advances idx (preventing repetition of skipped elements)
+  - rem < 0 is a natural pruning condition
+  - Answers found: [2,3] and also [2,3] found from idx=1 path → check both</span>
+</div>
+
+  <!-- N-QUEENS TREE -->
+  <h3>Recursion Tree: N-Queens (N=4, partial)</h3>
+  <p>State format: <strong style="color:var(--state)">(row, placement so far)</strong> · Only valid placements shown</p>
+<div class="tree">
+<span class="t-node">                    (row=0, board=[])</span>
+<span class="t-edge">          /       /          \           \</span>
+<span class="t-edge">       col=0    col=1        col=2       col=3</span>
+<span class="t-edge">         |        |            |            |</span>
+<span class="t-node">      (row=1,   (row=1,     (row=1,     (row=1,</span>
+<span class="t-node">       [0])      [1])        [2])        [3])</span>
+<span class="t-edge">         |      /    \          |          |</span>
+<span class="t-edge">       col=2  col=3   col=0   col=0      col=1</span>
+<span class="t-edge">    (others    |       |     (others    (others</span>
+<span class="t-prune">    conflict) </span><span class="t-node">(row=2, (row=2,  </span><span class="t-prune">conflict)  conflict)</span>
+<span class="t-node">             [1,3])   [2,0])</span>
+<span class="t-edge">               ...      ...</span>
+<span class="t-ok">          → ✓[1,3,0,2]  → ✓[2,0,3,1]</span>
+
+<span class="c-cmt">
+  Observations:
+  - At each row, we try all N columns
+  - Constraint check BEFORE recursing = pruning (not a base case)
+  - Valid paths (root to leaf at row=N) are the solutions
+  - The constraint (cols, diag sets) IS part of the state</span>
+</div>
+
+  <div class="callout gold">
+    <div class="callout-label">The Key Insight</div>
+    <p>Notice that in all three trees, <strong>you never think about code when drawing these trees.</strong> You think about states and choices. Once the tree is correct, the code writes itself: each node = one function call, each edge = one recursive call, leaf = base case.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════ S4: PATTERN CLASSIFICATION ════════════════ -->
+<section id="s4">
+  <div class="sec-header">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Recursion Pattern Classification</h2>
+  </div>
+
+  <div class="tbl-wrap">
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Pattern Name</th>
+      <th>Decision Type</th>
+      <th>State</th>
+      <th>Transition</th>
+      <th>Key Problems</th>
+    </tr>
+    <tr>
+      <td><strong>1</strong></td>
+      <td><strong>Linear Recursion</strong></td>
+      <td>One recursive call</td>
+      <td><code>n</code></td>
+      <td><code>n → n-1</code></td>
+      <td>Factorial, Linked List</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><strong>Binary Recursion</strong></td>
+      <td>Split into two halves</td>
+      <td><code>(lo, hi)</code></td>
+      <td><code>→ (lo,mid), (mid+1,hi)</code></td>
+      <td>Merge Sort, Binary Search</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td><strong>Take / Not Take</strong></td>
+      <td>Include or exclude current element</td>
+      <td><code>(idx, current)</code></td>
+      <td><code>idx+1, current±elem</code></td>
+      <td>Subsets, Subsets II, 0-1 Knapsack</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td><strong>Multi-Choice (Reusable)</strong></td>
+      <td>Take current (allow repeat) or skip</td>
+      <td><code>(idx, rem, current)</code></td>
+      <td>Take: <code>idx stays, rem-val</code>; Skip: <code>idx+1</code></td>
+      <td>Combination Sum I</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><strong>Loop-Based Backtracking</strong></td>
+      <td>Loop from start, pick each valid element</td>
+      <td><code>(start, current, rem)</code></td>
+      <td><code>start=i+1, current+[nums[i]], rem-nums[i]</code></td>
+      <td>Combination Sum II, III, Combinations</td>
+    </tr>
+    <tr>
+      <td><strong>6</strong></td>
+      <td><strong>Permutation Pattern</strong></td>
+      <td>Loop through all unused elements</td>
+      <td><code>(used[], current)</code></td>
+      <td>Mark used, add to current; undo both</td>
+      <td>Permutations I, II</td>
+    </tr>
+    <tr>
+      <td><strong>7</strong></td>
+      <td><strong>Combination Pattern</strong></td>
+      <td>Pick elements in sorted order (no reuse)</td>
+      <td><code>(start, k, current)</code></td>
+      <td><code>start=i+1, k stays, current+[i]</code></td>
+      <td>C(n,k), Combination Sum III</td>
+    </tr>
+    <tr>
+      <td><strong>8</strong></td>
+      <td><strong>Constraint Backtracking</strong></td>
+      <td>Place value; validate against constraints first</td>
+      <td><code>(position, constraint_sets)</code></td>
+      <td>Place at position + update constraints; undo both</td>
+      <td>N-Queens, Sudoku, Generate Parentheses</td>
+    </tr>
+    <tr>
+      <td><strong>9</strong></td>
+      <td><strong>Branch and Bound</strong></td>
+      <td>Same as constraint backtracking + bound check</td>
+      <td><code>(pos, current_cost, bound)</code></td>
+      <td>Prune if current exceeds known best</td>
+      <td>TSP, Graph coloring</td>
+    </tr>
+    <tr>
+      <td><strong>10</strong></td>
+      <td><strong>DP Transition Pattern</strong></td>
+      <td>Same as recursion + memoize overlapping states</td>
+      <td><code>(idx, rem) + memo</code></td>
+      <td>Same transitions + <code>memo[state] = result</code></td>
+      <td>Coin Change, Unique Paths, House Robber</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="callout gold">
+    <div class="callout-label">Pattern Selection Rule</div>
+    <p><strong>Start with the decision type.</strong> Binary decision (include/exclude) → Take/Not Take. Loop over remaining choices → Loop-Based. Need to handle constraints → Constraint Backtracking. Overlapping subproblems → DP Transition. The table above maps naturally.</p>
+  </div>
+</section>
+
+
+<!-- ════════════════ S5: BACKTRACKING ROADMAP ════════════════ -->
+<section id="s5">
+  <div class="sec-header">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">Complete Backtracking Pattern Roadmap</h2>
+  </div>
+
+  <!-- PATTERN 1 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P1</span>
+      <span class="pat-name">Take / Don't Take</span>
+      <span class="pat-tag">Binary · 2^n tree · No loop</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> Problem asks for all subsets, subsequences, or combinations where each element appears at most once and you decide per element independently.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(idx, current)</code> — index into the array, elements chosen so far</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>2 choices: include <code>nums[idx]</code> OR exclude it</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Include: <code>current.append(nums[idx])</code>, recurse with <code>idx+1</code><br>Exclude: recurse with <code>idx+1</code>, current unchanged</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p><code>idx == len(nums)</code> → record current (snapshot it!)</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Subsets</span> <span class="chip">Subsets II (sort + skip dups)</span> <span class="chip">Subsequence with sum K</span></p>
+      <p><strong>Common mistake:</strong> For Subsets II (with duplicates), you must sort the array first, then in the "exclude" path, skip all elements equal to nums[idx] before recursing — not after.</p>
+<pre><span class="c-cmt"># SUBSETS — Take / Don't Take</span>
+<span class="c-kw">def</span> subsets(nums):
+    results = []
+    <span class="c-kw">def</span> bt(idx, current):
+        <span class="c-base">if idx == len(nums):          # BASE CASE: all elements decided</span>
+            results.append(current[:])  <span class="c-cmt"># snapshot</span>
+            <span class="c-kw">return</span>
+
+        <span class="c-state">current.append(nums[idx])   </span><span class="c-cmt"># TAKE: modify state</span>
+        <span class="c-trans">bt(idx + 1, current)        </span><span class="c-cmt"># TRANSITION: advance</span>
+        <span class="c-state">current.pop()               </span><span class="c-cmt"># UNDO: backtrack</span>
+
+        <span class="c-trans">bt(idx + 1, current)        </span><span class="c-cmt"># DON'T TAKE: advance without adding</span>
+
+    bt(0, [])
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- PATTERN 2 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P2</span>
+      <span class="pat-name">Reusable Choice</span>
+      <span class="pat-tag">Binary · Infinite repetition allowed</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> "You may use the same element multiple times." The key twist: when you "take" an element, the index does NOT advance.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(idx, rem, current)</code> — index, remaining sum, current combination</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>Skip current element (advance idx) OR take it again (stay at idx, reduce rem)</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Skip: <code>idx+1</code>, rem unchanged<br>Take: <code>idx unchanged</code>, <code>rem - nums[idx]</code></p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p><code>rem == 0</code> → success; <code>rem &lt; 0</code> or <code>idx >= len</code> → fail</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Combination Sum I</span></p>
+      <p><strong>Pruning insight:</strong> If you sort the array first, you can break when <code>nums[idx] > rem</code> — all subsequent elements are also too large.</p>
+<pre><span class="c-cmt"># COMBINATION SUM I — Reusable Choice</span>
+<span class="c-kw">def</span> combinationSum(candidates, target):
+    candidates.sort()  <span class="c-cmt"># enable pruning</span>
+    results = []
+    <span class="c-kw">def</span> bt(idx, rem, current):
+        <span class="c-base">if rem == 0:                       # BASE CASE: found valid combo</span>
+            results.append(current[:])
+            <span class="c-kw">return</span>
+        <span class="c-base">if idx >= len(candidates): return  # BASE CASE: exhausted choices</span>
+
+        <span class="c-kw">for</span> i <span class="c-kw">in</span> range(idx, len(candidates)):
+            <span class="c-prune">if candidates[i] > rem: break      # PRUNE: sorted, no point continuing</span>
+            <span class="c-state">current.append(candidates[i])</span>
+            <span class="c-trans">bt(i, rem - candidates[i], current) </span><span class="c-cmt"># i not i+1 = allow reuse</span>
+            <span class="c-state">current.pop()</span>
+
+    bt(0, target, [])
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- PATTERN 3 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P3</span>
+      <span class="pat-name">Loop-Based Combinations</span>
+      <span class="pat-tag">N-ary · start index · no reuse</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> Combinations from a set with no repetition, where order doesn't matter. You always pass a <code>start</code> index to avoid revisiting earlier elements.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(start, current)</code> — starting index for this call's loop, elements chosen</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>Loop: for each i from start to end, choose nums[i]</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Add nums[i], recurse with <code>start = i+1</code> (no re-picking same element)</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>Length/sum target met → record; or loop simply exhausts naturally</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Combination Sum II</span> <span class="chip">Combination Sum III</span> <span class="chip">Combinations</span></p>
+      <p><strong>Deduplication (Sum II):</strong> Sort array. In the loop, if <code>i > start</code> and <code>nums[i] == nums[i-1]</code>, skip. This prevents same-value elements at the same position in the tree.</p>
+<pre><span class="c-cmt"># COMBINATION SUM II — with duplicate handling</span>
+<span class="c-kw">def</span> combinationSum2(candidates, target):
+    candidates.sort()
+    results = []
+    <span class="c-kw">def</span> bt(start, rem, current):
+        <span class="c-base">if rem == 0:</span>
+            results.append(current[:])
+            <span class="c-kw">return</span>
+        <span class="c-kw">for</span> i <span class="c-kw">in</span> range(start, len(candidates)):
+            <span class="c-prune">if candidates[i] > rem: break</span>
+            <span class="c-prune">if i > start and candidates[i] == candidates[i-1]: continue  # skip dup</span>
+            <span class="c-state">current.append(candidates[i])</span>
+            <span class="c-trans">bt(i + 1, rem - candidates[i], current)</span>
+            <span class="c-state">current.pop()</span>
+    bt(0, target, [])
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- PATTERN 4 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P4</span>
+      <span class="pat-name">Permutations</span>
+      <span class="pat-tag">N! · used[] array · all orderings</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> Order matters. Every arrangement of elements is a valid answer. Unlike combinations, you can pick any unused element at each step — no <code>start</code> index.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(current, used[])</code> — permutation built so far, boolean array of which elements are used</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>For each index i: if not used[i], pick nums[i]</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Mark <code>used[i]=True</code>, append <code>nums[i]</code>; undo both after recursion</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p><code>len(current) == len(nums)</code> → record current permutation</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Permutations I</span> <span class="chip">Permutations II</span></p>
+      <p><strong>Deduplication (Perms II):</strong> Sort array. Skip if <code>nums[i] == nums[i-1]</code> and <code>not used[i-1]</code> — this prunes duplicate subtrees.</p>
+<pre><span class="c-cmt"># PERMUTATIONS I</span>
+<span class="c-kw">def</span> permute(nums):
+    results = []
+    used = [False] * len(nums)
+    <span class="c-kw">def</span> bt(current):
+        <span class="c-base">if len(current) == len(nums):</span>
+            results.append(current[:])
+            <span class="c-kw">return</span>
+        <span class="c-kw">for</span> i <span class="c-kw">in</span> range(len(nums)):
+            <span class="c-prune">if used[i]: continue</span>
+            <span class="c-state">used[i] = True</span>
+            <span class="c-state">current.append(nums[i])</span>
+            <span class="c-trans">bt(current)</span>
+            <span class="c-state">current.pop()</span>
+            <span class="c-state">used[i] = False</span>
+    bt([])
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- PATTERN 5 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P5</span>
+      <span class="pat-name">Constraint Backtracking</span>
+      <span class="pat-tag">Validate before recurse · constraint sets</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> The problem has an explicit validity rule that must hold at every step (queens can't attack each other; parentheses must be balanced; Sudoku rules). You check the constraint BEFORE making the recursive call.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p>Current position + constraint tracking structure (sets, counts, or board)</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>All choices at current position; filter by constraint validity before recursing</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Place value → update constraint structure → recurse → undo both</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>All positions filled successfully → record result</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Generate Parentheses</span> <span class="chip">N-Queens</span> <span class="chip">Sudoku Solver</span></p>
+<pre><span class="c-cmt"># GENERATE PARENTHESES</span>
+<span class="c-kw">def</span> generateParenthesis(n):
+    results = []
+    <span class="c-kw">def</span> bt(s, open_count, close_count):
+        <span class="c-base">if len(s) == 2 * n:</span>
+            results.append(s)
+            <span class="c-kw">return</span>
+        <span class="c-dec">if open_count &lt; n:              </span><span class="c-cmt"># DECISION: can add '('</span>
+            <span class="c-trans">bt(s + '(', open_count+1, close_count)</span>
+        <span class="c-dec">if close_count &lt; open_count:    </span><span class="c-cmt"># DECISION: can add ')' (constraint!)</span>
+            <span class="c-trans">bt(s + ')', open_count, close_count+1)</span>
+    bt('', 0, 0)
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- PATTERN 6 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P6</span>
+      <span class="pat-name">String Construction</span>
+      <span class="pat-tag">Character-level decisions · partitioning</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> Building or partitioning strings where each character or substring has a binary/multiple choice (capitalize or not, cut here or not).</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(idx, current_path)</code> — character index, partitions chosen so far</p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>Palindrome Partitioning: for each end j ≥ idx, check if s[idx:j+1] is palindrome → cut there</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Add substring, advance to j+1; pop and try next j</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p><code>idx == len(s)</code> → all characters partitioned</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Letter Case Permutation</span> <span class="chip">Palindrome Partitioning</span></p>
+    </div>
+  </div>
+
+  <!-- PATTERN 7 -->
+  <div class="pattern-card">
+    <div class="pattern-card-head">
+      <span class="pat-num">P7</span>
+      <span class="pat-name">Grid Backtracking</span>
+      <span class="pat-tag">2D state · visited[][] · 4/8 directions</span>
+    </div>
+    <div class="pattern-card-body">
+      <p><strong>Recognition clue:</strong> Problem involves paths, searches, or placements on a 2D grid. State includes current cell position and visited status.</p>
+      <div class="sdtb-strip">
+        <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(row, col, idx_in_word, visited[][])</code></p></div>
+        <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>Move in 4 directions (up, down, left, right) from current cell — if in bounds, unvisited, matching</p></div>
+        <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Mark cell visited, recurse to neighbor; unmark on return</p></div>
+        <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>All word characters matched → return True (or record path)</p></div>
+      </div>
+      <p><strong>Problems:</strong> <span class="chip">Word Search</span> <span class="chip">Rat in a Maze</span></p>
+<pre><span class="c-cmt"># WORD SEARCH — Grid Backtracking</span>
+<span class="c-kw">def</span> exist(board, word):
+    rows, cols = len(board), len(board[0])
+    visited = [[False]*cols <span class="c-kw">for</span> _ <span class="c-kw">in</span> range(rows)]
+
+    <span class="c-kw">def</span> bt(r, c, idx):
+        <span class="c-base">if idx == len(word): return True   # BASE: all chars matched</span>
+        <span class="c-prune">if not (0 <= r < rows and 0 <= c < cols): return False</span>
+        <span class="c-prune">if visited[r][c] or board[r][c] != word[idx]: return False</span>
+
+        <span class="c-state">visited[r][c] = True</span>
+        <span class="c-kw">for</span> dr, dc <span class="c-kw">in</span> [(0,1),(0,-1),(1,0),(-1,0)]:
+            <span class="c-trans">if bt(r+dr, c+dc, idx+1): return True</span>
+        <span class="c-state">visited[r][c] = False              </span><span class="c-cmt"># UNDO</span>
+        <span class="c-kw">return</span> False
+
+    <span class="c-kw">return</span> any(bt(r, c, 0) <span class="c-kw">for</span> r <span class="c-kw">in</span> range(rows) <span class="c-kw">for</span> c <span class="c-kw">in</span> range(cols))</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════ S6: YOUR PERSONAL MISTAKES ════════════════ -->
+<section id="s6">
+  <div class="sec-header">
+    <span class="sec-num">06</span>
+    <h2 class="sec-title">Your Personal Mistakes</h2>
+  </div>
+  <p>These are the exact thinking failures that cause wrong code. Each one is diagnosed precisely so you can catch yourself in real time.</p>
+
+  <!-- Mistake 1 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M1</span>
+      <span class="mk-title">Thinking in Code Execution Instead of State</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> Your brain has been trained on imperative programming. When you see a recursive call, your instinct is to mentally "jump into" the function and trace execution line by line.</p>
+      <p><strong>Symptoms in code:</strong> You can't reason about recursion beyond 2-3 levels. You write recursion without drawing a tree first. You describe your solution as "first we do X, then we do Y" instead of "at any state (idx, current), we make these decisions."</p>
+      <p><strong>Example:</strong> Asked how Subsets works, you say "it calls bt(0,[]), then inside that it appends 1 and calls bt(1,[1])..." You can't describe what happens without simulating.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Before writing any code, draw the recursion tree with state labels on each node. Never start with "it calls..." — start with "the state at any node is (idx, current)."</p>
+      </div>
+      <div class="mental-box">Mental Model: You are a mapmaker, not a traveler. A mapmaker sees all paths simultaneously. A traveler follows one path at a time. Be the mapmaker.</div>
+    </div>
+  </div>
+
+  <!-- Mistake 2 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M2</span>
+      <span class="mk-title">Treating Recursion as Linear Flow</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> Linear reading habit. You think "this function runs top to bottom, then calls itself." But recursion creates a tree, not a sequence.</p>
+      <p><strong>Symptoms:</strong> You get confused by the "position" after a recursive call returns. You don't understand why code after the recursive call (the undo/backtrack step) is crucial.</p>
+      <p><strong>Example:</strong> You write <code>current.append(x)</code> and <code>bt(idx+1)</code>, but forget <code>current.pop()</code> — because you're thinking "the function is done, we move on."</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Think of recursion as <strong>going deep and coming back</strong>. Everything after the recursive call happens on the way UP the tree. The append-recurse-pop trio is: "apply decision → explore all futures → undo decision to try next option."</p>
+      </div>
+      <div class="mental-box">Mental Model: You're exploring a cave with a flashlight. You go in (append), explore all rooms (recurse), then walk back to the entrance (pop) to try the next tunnel.</div>
+    </div>
+  </div>
+
+  <!-- Mistake 3 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M3</span>
+      <span class="mk-title">Mixing Recursion Styles Within One Solution</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> You half-understand two different patterns and combine them unconsciously — e.g., using a loop AND a binary take/not-take structure for the same problem.</p>
+      <p><strong>Symptoms:</strong> Duplicate results. Wrong number of results. Same combination appearing multiple times with elements in different orders.</p>
+      <p><strong>Example:</strong> Using a loop-based structure for Combination Sum I (when you should use take/skip binary), causing the same element to be picked from different loop positions.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Identify the pattern first (Section 7 decision tree). Commit to one pattern. Don't mix binary take/not-take with loops in the same recursive function — they make incompatible assumptions about the index.</p>
+      </div>
+      <div class="mental-box">Mental Model: Pick your weapon before the fight. A sword fighter doesn't switch to a bow mid-combat. Choose your recursion pattern, then execute it cleanly.</div>
+    </div>
+  </div>
+
+  <!-- Mistake 4 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M4</span>
+      <span class="mk-title">Not Trusting Recursion (Over-Controlling)</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> You don't believe the recursive call will "do the right thing," so you try to manually manage what it does — pre-computing future states, adding extra logic, or adding redundant checks.</p>
+      <p><strong>Symptoms:</strong> Functions that are much longer than they need to be. Variables passed into recursion that aren't actually part of the state. Nested if-else where simple recursion would work.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>The <strong>recursive leap of faith</strong>: assume the recursive call handles its sub-problem perfectly. Your only job is to define the current node's state, make one decision, and hand off to recursion. Trust it.</p>
+      </div>
+      <div class="mental-box">Mental Model: A manager doesn't do their employees' jobs. You set the direction (decision + transition), then delegate (recursive call). The subtree handles itself.</div>
+    </div>
+  </div>
+
+  <!-- Mistake 5 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M5</span>
+      <span class="mk-title">Trying to Manually Build Future States</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> You try to "look ahead" — you want to know what the combination will look like at the end before committing to a path. This is the opposite of how recursion works.</p>
+      <p><strong>Symptoms:</strong> Pre-building result lists before the recursive call. Checking conditions that belong in the base case or the recursive step.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Recursion explores forward one step at a time. Define only the current step's transition. The final state assembles itself through repeated transitions. You never need to pre-compute the end state.</p>
+      </div>
+      <div class="mental-box">Mental Model: You don't know your destination when you start walking. You just know which direction to walk next. The destination reveals itself when you arrive (base case).</div>
+    </div>
+  </div>
+
+  <!-- Mistake 6 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M6</span>
+      <span class="mk-title">Treating Index as a Loop Counter</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> In iterative code, indices count. In recursion, they mean something deeper: the index defines the boundary of <em>remaining choices</em>.</p>
+      <p><strong>Symptoms:</strong> Confusion about whether to pass <code>i</code> or <code>i+1</code> in recursive calls. Incorrect handling of "same element multiple times" vs "no repetition" problems.</p>
+      <p><strong>The rule:</strong><br>
+        Pass <code>i</code> → allow reusing element at position i (Combination Sum I)<br>
+        Pass <code>i+1</code> → element i is done, move to next (Combination Sum II, Subsets)<br>
+        No start index → permutation (any unused element is valid)</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Ask yourself: "After choosing <code>nums[i]</code>, should I be allowed to choose it again?" If yes, pass <code>i</code>. If no, pass <code>i+1</code>. This determines the semantics of every index in backtracking.</p>
+      </div>
+      <div class="mental-box">Mental Model: The index is not a counter. It is a pointer that says "all elements before me have been decided. I and everything after me are still available."</div>
+    </div>
+  </div>
+
+  <!-- Mistake 7 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M7</span>
+      <span class="mk-title">Weak Pruning Intuition</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> Pruning requires reasoning about the structure of the search space. Beginners focus on making recursion correct first and never develop the habit of cutting bad branches early.</p>
+      <p><strong>Symptoms:</strong> Code that produces correct results but TLEs. Not recognizing that a sorted array enables early termination. Not understanding that validity checks can be moved before the recursive call.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>After writing correct code, always ask: "Is there any state I'm exploring that I already know will fail?" If yes, add a check at the top of the function before the decision loop. See Section 8 for full pruning methodology.</p>
+      </div>
+      <div class="mental-box">Mental Model: Pruning is not an optimization. It is early pattern recognition. A chess player doesn't consider every possible move — they immediately discard moves that are "obviously bad." Develop this intuition.</div>
+    </div>
+  </div>
+
+  <!-- Mistake 8 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M8</span>
+      <span class="mk-title">Difficulty Identifying Decisions</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> You think about decisions in terms of code structure instead of the problem domain. You can't separate "what are the choices" from "how do I implement the choices."</p>
+      <p><strong>The method:</strong> Freeze time at one recursion node. Ignore the code. Ask: in the real problem, at this moment, what can I do? List the choices in English. That list IS your decisions.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Every backtracking problem has a "what do I choose?" question. For Subsets: "do I include this element?" For N-Queens: "which column should the queen go in this row?" Articulate this in English before coding.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mistake 9 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M9</span>
+      <span class="mk-title">Difficulty Identifying State Transitions</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> Transitions require you to think about <em>how</em> a decision changes the state — what's different after the decision vs. before it.</p>
+      <p><strong>The method:</strong> For each decision, ask: "What in my state changes because of this decision?" That change = the transition. Everything you change on the way in must be un-changed on the way out (backtrack).</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>List state variables. For each decision, mark which variables change. Those are your transitions. Every changed variable needs an "undo" line below the recursive call. Check: does your undo perfectly reverse your modification?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mistake 10 -->
+  <div class="mistake-card">
+    <div class="mistake-head">
+      <span class="mk-num">M10</span>
+      <span class="mk-title">Confusing Validation and State Modification</span>
+    </div>
+    <div class="mistake-body">
+      <p><strong>Why it happens:</strong> Both validation (is this choice valid?) and state modification (apply this choice) happen around the recursive call, so they get tangled.</p>
+      <p><strong>The rule:</strong><br>
+        <strong>Validate</strong> → check before modifying. If invalid, continue/break. Do NOT modify state.<br>
+        <strong>Modify</strong> → change state (apply transition). Always followed by recursive call, then undo.<br>
+        Never validate inside the undo section. Never modify state inside the validation section.</p>
+      <div class="fix-box">
+        <div class="fix-box-label">Fix</div>
+        <p>Structure your loop body as: <code>if not valid: continue</code> → <code>modify state</code> → <code>recurse</code> → <code>undo state</code>. This exact order, every time.</p>
+      </div>
+      <div class="mental-box">Mental Model: Validate is the gatekeeper. Modify + Recurse + Undo is the actual action. The gatekeeper never enters the room — they just decide who does.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════ S7: IDENTIFY THE PATTERN ════════════════ -->
+<section id="s7">
+  <div class="sec-header">
+    <span class="sec-num">07</span>
+    <h2 class="sec-title">How to Identify the Correct Pattern</h2>
+  </div>
+
+  <p>When you see a new problem, run it through this decision sequence before writing any code. The questions are ordered from most to least discriminating.</p>
+
+  <div class="dflow">
+    <div class="dflow-q">
+      <div class="dq-label">Question 1</div>
+      <div class="dq-text">Is there a 2D grid involved? (positions on a board, matrix, or maze)</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">YES → Grid Backtracking (Pattern 7). State = (r, c, visited). 4-directional moves.</div>
+        <div class="dq-branch no">NO → Continue to Q2</div>
+      </div>
+    </div>
+    <div class="dflow-arrow">↓</div>
+    <div class="dflow-q">
+      <div class="dq-label">Question 2</div>
+      <div class="dq-text">Does the problem have an explicit validity constraint that must hold at every step? (queens can't attack, parentheses must be balanced, Sudoku rules)</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">YES → Constraint Backtracking (Pattern 5). Validate before each recursive call.</div>
+        <div class="dq-branch no">NO → Continue to Q3</div>
+      </div>
+    </div>
+    <div class="dflow-arrow">↓</div>
+    <div class="dflow-q">
+      <div class="dq-label">Question 3</div>
+      <div class="dq-text">Does ORDER matter? Is [1,2,3] a different answer from [3,2,1]?</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">YES → Permutation Pattern (Pattern 4). Use used[] array, no start index. Check if duplicates exist (sort + skip rule).</div>
+        <div class="dq-branch no">NO → Continue to Q4</div>
+      </div>
+    </div>
+    <div class="dflow-arrow">↓</div>
+    <div class="dflow-q">
+      <div class="dq-label">Question 4</div>
+      <div class="dq-text">Can the same element be reused multiple times in the same result?</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">YES → Reusable Choice (Pattern 2). Pass i (not i+1) in recursive call. Binary take/skip structure.</div>
+        <div class="dq-branch no">NO → Continue to Q5</div>
+      </div>
+    </div>
+    <div class="dflow-arrow">↓</div>
+    <div class="dflow-q">
+      <div class="dq-label">Question 5</div>
+      <div class="dq-text">Are there duplicate elements in the input that should NOT produce duplicate results?</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">YES → Loop-Based with dedup (Pattern 3). Sort + skip if nums[i] == nums[i-1] and i > start.</div>
+        <div class="dq-branch no">NO → Continue to Q6</div>
+      </div>
+    </div>
+    <div class="dflow-arrow">↓</div>
+    <div class="dflow-q">
+      <div class="dq-label">Question 6</div>
+      <div class="dq-text">Is the decision binary (include/exclude per element) or loop-based (pick from remaining elements)?</div>
+      <div class="dq-branches">
+        <div class="dq-branch yes">BINARY → Take/Not Take (Pattern 1). Two recursive calls per node. Think per-element decisions.</div>
+        <div class="dq-branch maybe">LOOP → Loop-Based Combinations (Pattern 3). One loop with start index. Think "pick next element."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout gold">
+    <div class="callout-label">Quick Cheat</div>
+    <div class="tbl-wrap">
+    <table>
+      <tr><th>If you see...</th><th>Pattern</th></tr>
+      <tr><td>"All subsets/subsequences"</td><td>Take/Not Take (P1)</td></tr>
+      <tr><td>"Unlimited use of each element"</td><td>Reusable Choice (P2)</td></tr>
+      <tr><td>"Each element used once, duplicates in input"</td><td>Loop-Based + dedup (P3)</td></tr>
+      <tr><td>"All arrangements / permutations"</td><td>Permutation (P4)</td></tr>
+      <tr><td>"Valid / invalid constraint at every step"</td><td>Constraint Backtracking (P5)</td></tr>
+      <tr><td>"Build / partition a string"</td><td>String Construction (P6)</td></tr>
+      <tr><td>"Grid / matrix / board path"</td><td>Grid Backtracking (P7)</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════ S8: PRUNING ════════════════ -->
+<section id="s8">
+  <div class="sec-header">
+    <span class="sec-num">08</span>
+    <h2 class="sec-title">Pruning</h2>
+  </div>
+
+  <div class="big-quote">Pruning is not an optimization trick. It is recognizing that certain branches of the state space are provably dead — and refusing to enter them.</div>
+
+  <h3>Why Pruning Matters</h3>
+  <div class="two-col">
+    <div class="callout p">
+      <div class="callout-label">Without Pruning</div>
+      <p>Combination Sum on a list of 20 elements exploring all combinations = potentially millions of recursive calls. TLE guaranteed.</p>
+    </div>
+    <div class="callout b">
+      <div class="callout-label">With Pruning</div>
+      <p>Once remaining sum goes negative, you skip an entire subtree instantly. Sorting enables this check. The difference can be 10x to 1000x.</p>
+    </div>
+  </div>
+
+  <h3>How to Discover Pruning</h3>
+  <p>After writing correct code, ask these three questions:</p>
+  <ol>
+    <li><strong>Impossibility:</strong> Is there a state from which success is impossible? (e.g., remaining sum < 0, more queens needed than columns available). Prune these immediately.</li>
+    <li><strong>Redundancy:</strong> Will this branch produce results already covered by a previous branch? (e.g., same combination with different starting position). Use sorting + dedup to prune.</li>
+    <li><strong>Optimality:</strong> Is this branch provably worse than the best solution found so far? (Branch and Bound). Prune if current partial solution already exceeds the known optimum.</li>
+  </ol>
+
+  <h3>Pruning Examples</h3>
+
+  <div class="callout p">
+    <div class="callout-label">Combination Sum — Impossibility Pruning</div>
+    <p>Sort the candidates. In the loop, if <code>candidates[i] > remaining</code>, break. Since the array is sorted, all subsequent elements are also too large. Entire remaining loop is skipped.</p>
+<pre><span class="c-kw">for</span> i <span class="c-kw">in</span> range(start, len(candidates)):
+    <span class="c-prune">if candidates[i] > rem: break   # sorted → all remaining also too large</span>
+    ...</pre>
+  </div>
+
+  <div class="callout p">
+    <div class="callout-label">Combination Sum III — Dual Pruning</div>
+    <p>Find k numbers that sum to n, using digits 1–9 exactly once. Two prune conditions:</p>
+    <ul>
+      <li>If current sum exceeds target: break (digits are sorted)</li>
+      <li>If we've picked more than k numbers: return immediately</li>
+    </ul>
+<pre><span class="c-kw">def</span> bt(start, current, remaining):
+    <span class="c-prune">if len(current) > k: return        # PRUNE: too many elements</span>
+    <span class="c-base">if len(current) == k and remaining == 0:</span>
+        results.append(current[:])
+        <span class="c-kw">return</span>
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> range(start, 10):
+        <span class="c-prune">if i > remaining: break            # PRUNE: impossible to reach target</span>
+        current.append(i)
+        bt(i + 1, current, remaining - i)
+        current.pop()</pre>
+  </div>
+
+  <div class="callout p">
+    <div class="callout-label">N-Queens — Constraint Pruning</div>
+    <p>Before placing a queen, check if the column and both diagonals are free. Checking takes O(1) with sets. This prunes invalid placements before exploring their subtrees — often eliminating 90%+ of the search space.</p>
+<pre><span class="c-kw">for</span> col <span class="c-kw">in</span> range(n):
+    <span class="c-prune">if col in cols or (row-col) in diag1 or (row+col) in diag2:</span>
+        <span class="c-prune">continue  # PRUNE: queen would be attacked</span>
+    <span class="c-state">cols.add(col); diag1.add(row-col); diag2.add(row+col)</span>
+    <span class="c-trans">solve(row + 1)</span>
+    <span class="c-state">cols.remove(col); diag1.remove(row-col); diag2.remove(row+col)</span></pre>
+  </div>
+
+  <h3>Safe vs Unsafe Pruning</h3>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Safe Pruning</th><th>Unsafe Pruning (Bug Risk)</th></tr>
+    <tr>
+      <td>Prune based on provable impossibility (sum exceeds target, constraint violated)</td>
+      <td>Pruning based on intuition without proof ("this looks like it won't work")</td>
+    </tr>
+    <tr>
+      <td>Pruning sorted arrays when current element exceeds remaining budget</td>
+      <td>Pruning based on partial state without considering all remaining choices</td>
+    </tr>
+    <tr>
+      <td>Deduplication pruning: skip same value at same depth after sorting</td>
+      <td>Pruning that causes valid results to be skipped (off-by-one in dedup condition)</td>
+    </tr>
+    <tr>
+      <td>Constraint violation pruning (N-Queens, Sudoku)</td>
+      <td>Assuming "if first choice fails, all choices fail" (without actually checking)</td>
+    </tr>
+  </table>
+  </div>
+</section>
+
+
+<!-- ════════════════ S9: TEMPLATE LIBRARY ════════════════ -->
+<section id="s9">
+  <div class="sec-header">
+    <span class="sec-num">09</span>
+    <h2 class="sec-title">Master Template Library</h2>
+  </div>
+  <p>These templates encode the thinking framework into reusable code structures. Study the annotations — they map code to STATE / DECISION / TRANSITION / BASE CASE.</p>
+
+  <!-- TPL 1: Binary Recursion -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">1 — Binary Recursion</span>
+      <span class="tpl-badge">Split in half · merge results</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> solve(lo, hi):
+    <span class="c-base"># BASE CASE</span>
+    <span class="c-base">if lo >= hi: return base_value</span>
+
+    mid = (lo + hi) // 2
+
+    <span class="c-dec"># DECISION: split into two subproblems</span>
+    left  = <span class="c-trans">solve(lo, mid)          # TRANSITION: (lo,hi) → (lo,mid)</span>
+    right = <span class="c-trans">solve(mid+1, hi)       # TRANSITION: (lo,hi) → (mid+1,hi)</span>
+
+    <span class="c-kw">return</span> merge(left, right)</pre>
+    </div>
+  </div>
+
+  <!-- TPL 2: Take / Not Take -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">2 — Take / Not Take</span>
+      <span class="tpl-badge">Binary · 2^n tree · Subsets family</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> backtrack(idx, current):
+    <span class="c-base"># BASE CASE: all elements decided</span>
+    <span class="c-base">if idx == len(nums):</span>
+        results.append(current[:])   <span class="c-cmt"># SNAPSHOT is critical</span>
+        <span class="c-kw">return</span>
+
+    <span class="c-dec"># DECISION 1: TAKE nums[idx]</span>
+    <span class="c-state">current.append(nums[idx])      </span><span class="c-cmt"># modify state</span>
+    <span class="c-trans">backtrack(idx + 1, current)    </span><span class="c-cmt"># transition: advance</span>
+    <span class="c-state">current.pop()                  </span><span class="c-cmt"># undo</span>
+
+    <span class="c-dec"># DECISION 2: SKIP nums[idx]</span>
+    <span class="c-trans">backtrack(idx + 1, current)    </span><span class="c-cmt"># transition: advance (no undo needed)</span></pre>
+    </div>
+  </div>
+
+  <!-- TPL 3: Combination Pattern -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">3 — Combination Pattern (No Reuse)</span>
+      <span class="tpl-badge">Loop · start index · sorted</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> backtrack(start, current):
+    <span class="c-base"># BASE CASE: target achieved</span>
+    <span class="c-base">if target_achieved(current):</span>
+        results.append(current[:])
+        <span class="c-kw">return</span>
+
+    <span class="c-dec"># DECISION: choose one element from [start, end)</span>
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> range(start, len(nums)):
+        <span class="c-prune">if nums[i] > remaining: break  # PRUNE if sorted</span>
+        <span class="c-prune">if i > start and nums[i] == nums[i-1]: continue  # DEDUP if needed</span>
+
+        <span class="c-state">current.append(nums[i])        </span><span class="c-cmt"># modify state</span>
+        <span class="c-trans">backtrack(i + 1, current)      </span><span class="c-cmt"># i+1 = no reuse</span>
+        <span class="c-state">current.pop()                  </span><span class="c-cmt"># undo</span></pre>
+    </div>
+  </div>
+
+  <!-- TPL 4: Permutation Pattern -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">4 — Permutation Pattern</span>
+      <span class="tpl-badge">N! · used[] · all orderings</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> backtrack(current, used):
+    <span class="c-base"># BASE CASE: all elements placed</span>
+    <span class="c-base">if len(current) == len(nums):</span>
+        results.append(current[:])
+        <span class="c-kw">return</span>
+
+    <span class="c-dec"># DECISION: pick any unused element</span>
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> range(len(nums)):
+        <span class="c-prune">if used[i]: continue</span>
+        <span class="c-prune"># DEDUP for Permutations II:
+        # if i > 0 and nums[i] == nums[i-1] and not used[i-1]: continue</span>
+
+        <span class="c-state">used[i] = True</span>
+        <span class="c-state">current.append(nums[i])</span>
+        <span class="c-trans">backtrack(current, used)</span>
+        <span class="c-state">current.pop()</span>
+        <span class="c-state">used[i] = False</span></pre>
+    </div>
+  </div>
+
+  <!-- TPL 5: Reusable Choice -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">5 — Reusable Choice (Loop Form)</span>
+      <span class="tpl-badge">i stays · unlimited reuse</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> backtrack(start, rem, current):
+    <span class="c-base">if rem == 0:                          # BASE CASE: exact hit</span>
+        results.append(current[:])
+        <span class="c-kw">return</span>
+
+    <span class="c-dec"># DECISION: pick element at i (reusable)</span>
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> range(start, len(nums)):
+        <span class="c-prune">if nums[i] > rem: break               # PRUNE: sorted array</span>
+
+        <span class="c-state">current.append(nums[i])</span>
+        <span class="c-trans">backtrack(i, rem - nums[i], current)  </span><span class="c-cmt"># i not i+1 = allow reuse</span>
+        <span class="c-state">current.pop()</span></pre>
+    </div>
+  </div>
+
+  <!-- TPL 6: Constraint Backtracking -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">6 — Constraint Backtracking</span>
+      <span class="tpl-badge">Validate → Modify → Recurse → Undo</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> backtrack(position):
+    <span class="c-base">if all_positions_filled(position):    # BASE CASE: complete solution</span>
+        results.append(build_solution())
+        <span class="c-kw">return</span>
+
+    <span class="c-dec"># DECISION: loop through all choices for current position</span>
+    <span class="c-kw">for</span> choice <span class="c-kw">in</span> get_choices(position):
+        <span class="c-prune">if not is_valid(choice, position, constraints):  # VALIDATE first</span>
+            <span class="c-prune">continue</span>
+
+        <span class="c-state">apply(position, choice)              </span><span class="c-cmt"># modify state</span>
+        <span class="c-state">update_constraints(choice)           </span><span class="c-cmt"># modify constraint tracking</span>
+        <span class="c-trans">backtrack(next_position(position))   </span><span class="c-cmt"># recurse</span>
+        <span class="c-state">undo_constraints(choice)             </span><span class="c-cmt"># undo constraint tracking</span>
+        <span class="c-state">undo(position, choice)               </span><span class="c-cmt"># undo state</span></pre>
+    </div>
+  </div>
+
+  <!-- TPL 7: N-Queens -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">7 — N-Queens</span>
+      <span class="tpl-badge">O(N!) · 3 constraint sets</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> solveNQueens(n):
+    results = []
+    cols, diag1, diag2 = set(), set(), set()  <span class="c-cmt"># CONSTRAINT TRACKING (state)</span>
+    board = [0] * n
+
+    <span class="c-kw">def</span> bt(row):
+        <span class="c-base">if row == n:                           # BASE CASE: all rows filled</span>
+            results.append(['.'*c + 'Q' + '.'*(n-c-1) <span class="c-kw">for</span> c <span class="c-kw">in</span> board])
+            <span class="c-kw">return</span>
+
+        <span class="c-dec">for col in range(n):                   # DECISION: try each column</span>
+            <span class="c-prune">if col in cols or (row-col) in diag1 or (row+col) in diag2:</span>
+                <span class="c-prune">continue                       # VALIDATE: skip attacked positions</span>
+
+            <span class="c-state">board[row] = col</span>               <span class="c-cmt"># modify state</span>
+            <span class="c-state">cols.add(col)</span>
+            <span class="c-state">diag1.add(row-col)</span>
+            <span class="c-state">diag2.add(row+col)</span>
+            <span class="c-trans">bt(row + 1)                    </span><span class="c-cmt"># TRANSITION: next row</span>
+            <span class="c-state">cols.remove(col)               </span><span class="c-cmt"># undo all state changes</span>
+            <span class="c-state">diag1.remove(row-col)</span>
+            <span class="c-state">diag2.remove(row+col)</span>
+
+    bt(0)
+    <span class="c-kw">return</span> results</pre>
+    </div>
+  </div>
+
+  <!-- TPL 8: Sudoku -->
+  <div class="tpl-card">
+    <div class="tpl-head">
+      <span class="tpl-title">8 — Sudoku Solver</span>
+      <span class="tpl-badge">Return bool · find-first solution</span>
+    </div>
+    <div class="tpl-body">
+<pre><span class="c-kw">def</span> solveSudoku(board):
+    empty = [(r,c) <span class="c-kw">for</span> r <span class="c-kw">in</span> range(9) <span class="c-kw">for</span> c <span class="c-kw">in</span> range(9) <span class="c-kw">if</span> board[r][c] == '.']
+
+    <span class="c-kw">def</span> is_valid(r, c, d):
+        <span class="c-kw">if</span> d <span class="c-kw">in</span> board[r]: <span class="c-kw">return</span> False           <span class="c-cmt"># check row</span>
+        <span class="c-kw">if</span> d <span class="c-kw">in</span> [board[i][c] <span class="c-kw">for</span> i <span class="c-kw">in</span> range(9)]: <span class="c-kw">return</span> False  <span class="c-cmt"># col</span>
+        br, bc = 3*(r//3), 3*(c//3)
+        <span class="c-kw">if</span> d <span class="c-kw">in</span> [board[br+dr][bc+dc] <span class="c-kw">for</span> dr <span class="c-kw">in</span> range(3) <span class="c-kw">for</span> dc <span class="c-kw">in</span> range(3)]:
+            <span class="c-kw">return</span> False
+        <span class="c-kw">return</span> True
+
+    <span class="c-kw">def</span> bt(idx):
+        <span class="c-base">if idx == len(empty): return True      # BASE CASE: all empty cells filled</span>
+
+        r, c = empty[idx]                    <span class="c-cmt"># STATE: current empty cell</span>
+
+        <span class="c-dec">for d in '123456789':                  # DECISION: digits 1-9</span>
+            <span class="c-prune">if not is_valid(r, c, d): continue   # VALIDATE</span>
+
+            <span class="c-state">board[r][c] = d                    </span><span class="c-cmt"># TRANSITION: place digit</span>
+            <span class="c-kw">if</span> <span class="c-trans">bt(idx + 1)</span>: <span class="c-kw">return</span> True        <span class="c-cmt"># recurse to next cell</span>
+            <span class="c-state">board[r][c] = '.'                  </span><span class="c-cmt"># UNDO on failure</span>
+
+        <span class="c-kw">return</span> False                         <span class="c-cmt"># BASE CASE (failure): no digit works</span>
+
+    bt(0)</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════ S10: INTERVIEW MINDSET ════════════════ -->
+<section id="s10">
+  <div class="sec-header">
+    <span class="sec-num">10</span>
+    <h2 class="sec-title">Interview Mindset</h2>
+  </div>
+
+  <div class="big-quote">Google engineers don't start with code. They start with a state diagram. Your interviewer is watching HOW you think, not just WHAT you produce.</div>
+
+  <h3>The Pre-Coding Ritual (Do this out loud)</h3>
+  <div class="callout gold">
+    <div class="callout-label">Step-by-Step Protocol — Takes 3-5 minutes, saves 30 minutes of debugging</div>
+    <ol>
+      <li><strong>Restate the goal:</strong> "I need to generate/find all X such that Y."</li>
+      <li><strong>Identify STATE:</strong> "At any point in my recursion, I need to know [list state variables]."</li>
+      <li><strong>Identify DECISIONS:</strong> "From any state, I can [list choices]."</li>
+      <li><strong>Identify TRANSITIONS:</strong> "If I make decision X, state changes to Y."</li>
+      <li><strong>Identify BASE CASES:</strong> "I stop when [success condition] or [failure condition]."</li>
+      <li><strong>Draw a small tree:</strong> Show 2-3 levels for a small example. "Let me draw this quickly."</li>
+      <li><strong>Identify pruning:</strong> "I can prune whenever [condition] — here's why that's safe."</li>
+      <li><strong>Write the template:</strong> Now write the code following the template for the identified pattern.</li>
+    </ol>
+  </div>
+
+  <h3>Applied to Subsets</h3>
+  <div class="sdtb-strip">
+    <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p>"At each call I know which index I'm at and what I've collected so far: <code>(idx, current)</code>."</p></div>
+    <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>"For each element at idx, I decide: include it or exclude it. Two choices always."</p></div>
+    <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>"Both decisions advance idx to idx+1. Include also adds nums[idx] to current."</p></div>
+    <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>"When idx equals len(nums), every element has been decided. Record current."</p></div>
+  </div>
+
+  <h3>Applied to Combination Sum</h3>
+  <div class="sdtb-strip">
+    <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(idx, remaining_sum, current)</code>. The index determines which elements are still available. Remaining tells me how much more I need.</p></div>
+    <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>"Two decisions: skip current element (advance idx), or take it (stay at idx since reuse is allowed, subtract from remaining)."</p></div>
+    <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>Skip: <code>idx+1</code>, remaining unchanged. Take: <code>idx stays</code>, <code>remaining - nums[idx]</code>.</p></div>
+    <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p><code>remaining == 0</code>: success. <code>remaining &lt; 0</code> or <code>idx >= len</code>: failure/return.</p></div>
+  </div>
+
+  <h3>Applied to N-Queens</h3>
+  <div class="sdtb-strip">
+    <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(row, cols, diag1, diag2)</code>. Row tells me where I'm placing next. The three sets track which positions are attacked.</p></div>
+    <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>"For the current row, I try each column 0 to N-1 — but only those not attacked."</p></div>
+    <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>"Place queen at (row, col). Advance to row+1. Add col, row-col, row+col to constraint sets."</p></div>
+    <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>"When row equals N, all N queens are placed. This is a valid solution."</p></div>
+  </div>
+
+  <h3>Applied to Sudoku</h3>
+  <div class="sdtb-strip">
+    <div class="sdtb-item s"><span class="sdtb-lbl">State</span><p><code>(index into empty_cells list, board)</code>. Each call decides one empty cell.</p></div>
+    <div class="sdtb-item d"><span class="sdtb-lbl">Decision</span><p>"Digits 1–9. Check validity (row, column, 3×3 box constraint) before placing."</p></div>
+    <div class="sdtb-item t"><span class="sdtb-lbl">Transition</span><p>"Place valid digit d at (r,c). Advance to next empty cell (idx+1)."</p></div>
+    <div class="sdtb-item b"><span class="sdtb-lbl">Base Case</span><p>"Index equals total number of empty cells → board is fully solved."</p></div>
+  </div>
+
+  <h3>What Makes a Candidate Stand Out</h3>
+  <div class="tbl-wrap">
+  <table>
+    <tr><th>Average Candidate</th><th>Strong Candidate</th></tr>
+    <tr><td>Jumps straight to code</td><td>Articulates state, decision, transition before touching code</td></tr>
+    <tr><td>Describes code execution: "first it does X..."</td><td>Describes the search space: "the tree has this shape..."</td></tr>
+    <tr><td>Adds pruning as an afterthought</td><td>Identifies pruning opportunities during state design</td></tr>
+    <tr><td>Can't explain why recursion is correct</td><td>Explains: "base case covers all leaves; inductive step: if subtree is correct, function is correct"</td></tr>
+    <tr><td>Confused by backtracking (why do we pop?)</td><td>Explains: "pop undoes the transition so we can explore the next decision from the same state"</td></tr>
+    <tr><td>Uses trial-and-error to find bugs</td><td>Checks: did I snapshot the result? Did I undo every modification? Is the base case hit on the right condition?</td></tr>
+  </table>
+  </div>
+</section>
+
+
+<!-- ════════════════ S11: CHEAT SHEET ════════════════ -->
+<section id="s11">
+  <div class="sec-header">
+    <span class="sec-num">11</span>
+    <h2 class="sec-title">One-Page Revision Cheat Sheet</h2>
+  </div>
+  <p>Review this in 5 minutes before any interview. It contains everything you need to activate the framework.</p>
+
+  <div class="cheat">
+
+    <!-- The Formula -->
+    <div class="cheat-section">
+      <span class="cheat-label">The Universal Formula</span>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600; color:var(--text); line-height:2; letter-spacing:.02em;">
+        <span style="color:var(--state)">STATE</span> → <span style="color:var(--decision)">DECISION</span> → <span style="color:var(--trans)">TRANSITION</span> → <span style="color:var(--base)">BASE CASE</span>
+      </div>
+      <p style="font-size:13px; color:var(--muted); margin-top:6px; margin-bottom:0;">Every recursion/backtracking problem reduces to these four questions. Answer them before writing code.</p>
+    </div>
+
+    <hr>
+
+    <!-- Pattern Recognition -->
+    <div class="cheat-section">
+      <span class="cheat-label">Pattern Quick-Select</span>
+      <div class="cheat-row">
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--state)"></div><div>"All subsets/subsequences" → <strong>Take/Not Take</strong> (binary, 2^n)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--state)"></div><div>"Reuse same element" → <strong>Reusable Choice</strong> (pass i, not i+1)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>"No reuse, duplicates in input" → <strong>Loop + sort + dedup</strong></div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>"Order matters, all arrangements" → <strong>Permutation</strong> (used[])</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--trans)"></div><div>"Validity constraint at each step" → <strong>Constraint Backtracking</strong></div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--trans)"></div><div>"Grid / 2D board" → <strong>Grid Backtracking</strong> (visited[][])</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--base)"></div><div>"Build / cut string" → <strong>String Construction</strong> (idx into string)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--prune)"></div><div>"Overlapping subproblems" → <strong>DP Transition</strong> (add memoization)</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Index Rule -->
+    <div class="cheat-section">
+      <span class="cheat-label">The Index Rule (Critical)</span>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; line-height:2.2;">
+        <span style="color:var(--base)">pass i    </span> → element at i can be reused (Combination Sum I)<br>
+        <span style="color:var(--decision)">pass i+1  </span> → element at i is done, no reuse (Combination Sum II, Subsets)<br>
+        <span style="color:var(--trans)">no start  </span> → permutation mode, all unused elements valid
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Dedup Rules -->
+    <div class="cheat-section">
+      <span class="cheat-label">Deduplication Rules</span>
+      <div class="cheat-row">
+        <div>
+          <p style="font-size:13px; margin-bottom:6px;"><strong>Combination dedup</strong> (Subsets II, Comb Sum II):</p>
+          <p style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--prune);">Sort first. In loop: if i > start and nums[i] == nums[i-1]: continue</p>
+        </div>
+        <div>
+          <p style="font-size:13px; margin-bottom:6px;"><strong>Permutation dedup</strong> (Perms II):</p>
+          <p style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--prune);">Sort first. Skip if nums[i] == nums[i-1] and not used[i-1]</p>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Common Pruning -->
+    <div class="cheat-section">
+      <span class="cheat-label">Common Pruning Rules</span>
+      <div class="cheat-row">
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--prune)"></div><div><strong>Sum exceeds target</strong> → sort + break when nums[i] > remaining</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--prune)"></div><div><strong>Too many elements</strong> → return if len(current) > k</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--prune)"></div><div><strong>Constraint violated</strong> → skip before modifying state (N-Queens)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--prune)"></div><div><strong>No path possible</strong> → return False early (Sudoku)</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Backtracking Skeleton -->
+    <div class="cheat-section">
+      <span class="cheat-label">Universal Backtracking Skeleton</span>
+<pre style="margin:0; font-size:12px;">def bt(state):
+    <span class="c-base">if base_case: record/return</span>           <span class="c-cmt"># BASE</span>
+
+    for choice in decisions(state):        <span class="c-cmt"># DECISION</span>
+        <span class="c-prune">if not valid(choice): continue</span>     <span class="c-cmt"># PRUNE</span>
+        <span class="c-state">modify(state, choice)</span>              <span class="c-cmt"># TRANSITION</span>
+        <span class="c-trans">bt(next_state)</span>                     <span class="c-cmt"># RECURSE</span>
+        <span class="c-state">undo(state, choice)</span>                <span class="c-cmt"># BACKTRACK</span></pre>
+    </div>
+
+    <hr>
+
+    <!-- Top 5 Mistakes to avoid -->
+    <div class="cheat-section">
+      <span class="cheat-label">5 Mistakes to Actively Avoid</span>
+      <div class="cheat-row">
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>Tracing code mentally instead of drawing the state tree</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>Forgetting current[:] snapshot — passing reference not copy</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>Not undoing ALL modifications (esp. constraint tracking structures)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>Using i vs i+1 incorrectly in recursive call (reuse vs no-reuse)</div></div>
+        <div class="cheat-pill"><div class="cheat-pill-dot" style="background:var(--decision)"></div><div>Mixing validation and state modification (gatekeeper must not enter the room)</div></div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Interview ritual condensed -->
+    <div class="cheat-section">
+      <span class="cheat-label">Pre-Code Ritual (Say Aloud)</span>
+      <ol style="font-size:13px; line-height:2;">
+        <li><strong style="color:var(--state)">STATE:</strong> "At each node I know ___"</li>
+        <li><strong style="color:var(--decision)">DECISION:</strong> "My choices are ___"</li>
+        <li><strong style="color:var(--trans)">TRANSITION:</strong> "Each choice changes state to ___"</li>
+        <li><strong style="color:var(--base)">BASE:</strong> "I stop when ___ (success) or ___ (failure)"</li>
+        <li><strong style="color:var(--prune)">PRUNE:</strong> "I can skip branches when ___"</li>
+        <li>Draw a 2-level tree on paper. Then code the template.</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<script>
+// Active sidebar link tracking
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.sidebar a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const active = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

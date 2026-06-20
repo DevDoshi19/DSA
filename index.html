@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FAANG DSA Dojo — Crack Google Interviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #040404;
+    --bg2: #080808;
+    --bg3: #0c0c0c;
+    --border: #1a1a1a;
+    --mono: 'DM Mono', 'Fira Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: #fff;
+    font-family: var(--mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 5px; height: 5px; background: #111; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+  /* ── HEADER ── */
+  #header {
+    border-bottom: 1px solid #111;
+    padding: 22px 28px 18px;
+    background: linear-gradient(180deg,#0a0a0a 0%,#040404 100%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  #header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  #logo {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: -1px;
+    transition: background 0.4s;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  #logo-sub { color: #444; font-size: 11px; margin-top: 3px; }
+  #mode-badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+  }
+  /* ── PROCESS FLOW ── */
+  #process-flow {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .process-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #0a0a0a;
+    border: 1px solid #1c1c1c;
+    border-radius: 6px;
+    padding: 7px 10px;
+    flex: 1 1 130px;
+    min-width: 110px;
+    transition: border-color 0.3s;
+  }
+  .process-step:hover { border-color: #333; }
+  .process-num { font-weight: 700; font-size: 11px; flex-shrink: 0; }
+  .process-label { color: #fff; font-size: 11px; font-weight: 600; }
+  .process-desc { color: #abaaaa; font-size: 10px; line-height: 1.5; margin-top: 2px; }
+
+  /* ── LAYOUT ── */
+  #layout {
+    display: flex;
+    min-height: calc(100vh - 180px);
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: 128px;
+    min-width: 100px;
+    border-right: 1px solid #111;
+    padding: 18px 0;
+    background: #030303;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .topic-btn {
+    display: block;
+    width: 100%;
+    padding: 13px 12px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    color: #9c9c9c;
+    cursor: pointer;
+    font-size: 11.5px;
+    font-family: var(--mono);
+    font-weight: 400;
+    transition: all 0.2s;
+    line-height: 1.3;
+  }
+  .topic-btn:hover { color: #888; background: #080808; }
+  .topic-btn.active { background: #0d0d0d; font-weight: 600; }
+  .topic-icon { font-size: 18px; margin-bottom: 4px; display: block; }
+  #mantra-box {
+    margin: 18px 8px 0;
+    padding: 10px;
+    background: #0a0a0a;
+    border-radius: 6px;
+    border: 1px solid #1a1a1a;
+  }
+  #mantra-title { color: #f0f030; font-size: 10px; margin-bottom: 5px; }
+  #mantra-text { color: #b8b6b6; font-size: 10px; line-height: 1.7; }
+
+  /* ── CONTENT ── */
+  #content {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+    max-width: 100%;
+  }
+
+  /* ── TOPIC HEADER ── */
+  #topic-header { margin-bottom: 20px; }
+  #topic-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  #topic-big-icon { font-size: 30px; }
+  #topic-name {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 22px;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  #topic-tagline { color: #555; font-size: 12px; margin-top: 3px; }
+  #mindset-box {
+    background: #090909;
+    border-radius: 8px;
+    padding: 14px 18px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  #mindset-title { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  #mindset-text {
+    color: #bbb;
+    font-size: 12px;
+    white-space: pre-wrap;
+    line-height: 1.85;
+    font-family: var(--mono);
+  }
+
+  /* ── TABS ── */
+  #tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab-btn {
+    padding: 7px 16px;
+    border-radius: 6px;
+    border: 1px solid #222;
+    background: transparent;
+    color: #bcbcbc;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  /* .tab-btn.active { } */
+  .tab-btn:hover:not(.active) { border-color: #333; color: #888; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.visible { display: block; }
+  .section-hint { color: #eefec8; font-size: 11px; margin-bottom: 16px; }
+
+  /* ── PATTERN CARD ── */
+  .pattern-card {
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    background: #080808;
+    border: 1px solid #111;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .pattern-card:hover { background: #0a0a0a; }
+  .pattern-card.open { background: #0d0d0d; }
+  .pattern-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pattern-name { font-weight: 700; font-size: 14px; font-family: var(--mono); }
+  .pattern-when { color: #cd2121; font-size: 11.5px; margin-top: 4px; }
+  .card-arrow { color: #adadad; font-size: 14px; transition: transform 0.2s; user-select: none; }
+  .pattern-card.open .card-arrow { transform: rotate(180deg); }
+  .pattern-body { display: none; margin-top: 14px; }
+  .pattern-card.open .pattern-body { display: block; }
+
+  .signal-box {
+    background: #111;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .signal-label { color: #f0f030; font-size: 11px; margin-bottom: 4px; }
+  .signal-text { color: #bbb; font-size: 12px; font-family: var(--mono); }
+  .visual-box {
+    background: #0a0f0a;
+    border: 1px solid #1a2a1a;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+  .visual-label { color: #0f8; font-size: 11px; margin-bottom: 5px; }
+  .visual-pre { color: #cac4c4; font-size: 12px; font-family: var(--mono); white-space: pre-wrap; margin: 0; }
+  .code-box {
+    background: #080d14;
+    border: 1px solid #1a2040;
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .code-label { color: #5af; font-size: 11px; margin-bottom: 6px; }
+  .code-pre {
+    color: #d0e4ff;
+    font-size: 12px;
+    font-family: var(--mono);
+    white-space: pre;
+    margin: 0;
+    overflow-x: auto;
+    line-height: 1.75;
+  }
+
+  /* ── TRICKS ── */
+  .trick-item {
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #0c0c0c;
+    border: 1px solid transparent;
+    color: #ccc;
+    font-size: 13px;
+    font-family: var(--mono);
+    line-height: 1.5;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .trick-item:hover { border-color: #2a2a2a; }
+
+  /* ── CHEATSHEET GRID ── */
+  #cheatsheet {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: #0a0a0a;
+    border-radius: 8px;
+    border: 1px dashed transparent;
+    transition: border-color 0.3s;
+  }
+  #cheatsheet-title { font-size: 12px; font-weight: 700; margin-bottom: 12px; }
+  #cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 8px;
+  }
+  .cheat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #080808;
+    border-radius: 6px;
+    border: 1px solid #1a1a1a;
+  }
+  .cheat-signal { color: #b8b6b6; font-size: 11px; }
+  .cheat-pattern { font-size: 11px; font-weight: 700; }
+
+  /* ── FAANG TABLE ── */
+  .faang-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: var(--mono);
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .faang-table th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    border-bottom: 1px solid transparent;
+  }
+  .faang-table td {
+    padding: 10px 14px;
+    vertical-align: top;
+  }
+  .faang-table tr:nth-child(even) td { background: #060606; }
+  .faang-table tr:nth-child(odd) td { background: #080808; }
+  .faang-table tr:hover td { background: #0d0d0d; }
+  .td-q { color: #fff; font-weight: 500; }
+  .td-pat { font-weight: 700; }
+  .td-hint { color: #777; font-style: italic; }
+
+  /* ── INTERVIEW SCRIPT ── */
+  #interview-script {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: #0a0a0a;
+    border-radius: 8px;
+    border: 1px solid #1e1e1e;
+  }
+  #script-title { color: #f0f030; font-size: 12px; font-weight: 700; margin-bottom: 14px; }
+  .script-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .script-step { font-weight: 700; font-size: 12px; min-width: 90px; flex-shrink: 0; }
+  .script-line { color: #999; font-size: 12px; line-height: 1.65; font-style: italic; }
+
+  /* ── FOOTER ── */
+  #footer {
+    border-top: 1px solid #111;
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #030303;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #footer-left { color: #2a2a2a; font-size: 11px; }
+  #footer-right { display: flex; gap: 18px; }
+  .footer-step { color: #2a2a2a; font-size: 10px; }
+
+  /* ── MOBILE ── */
+  @media(max-width: 700px) {
+    #header { padding: 16px 16px 14px; }
+    #content { padding: 18px 16px; }
+    #sidebar { width: 90px; min-width: 80px; }
+    .topic-btn { font-size: 10px; padding: 11px 8px; }
+    #logo { font-size: 20px; }
+    .code-pre { font-size: 11px; }
+    #cheat-grid { grid-template-columns: 1fr; }
+    .faang-table { font-size: 11px; }
+    #footer { padding: 10px 16px; }
+  }
+  @media(max-width: 480px) {
+    #layout { flex-direction: column; }
+    #sidebar {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 10px 8px;
+      border-right: none;
+      border-bottom: 1px solid #111;
+    }
+    .topic-btn {
+      flex: 1 1 80px;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      text-align: center;
+      padding: 8px 6px;
+    }
+    .topic-btn.active { border-left: none; border-bottom-color: var(--active-color, #0ff); }
+    #mantra-box { display: none; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeIn 0.25s ease forwards; }
+
+  @keyframes glowPulse {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+  #mode-badge { animation: glowPulse 2.5s ease infinite; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════ -->
+<div id="header">
+  <div id="header-top">
+    <div>
+      <div id="logo">FAANG DSA DOJO</div>
+      <div id="logo-sub">Your personal mentor for cracking Google · Meta · Amazon interviews</div>
+    </div>
+    <div id="mode-badge">ARRAYS MODE</div>
+  </div>
+
+  <div id="process-flow">
+    <div class="process-step">
+      <span class="process-num">01</span>
+      <div><div class="process-label">Read Twice</div><div class="process-desc">First pass: understand. Second pass: spot constraints</div></div>
+    </div>
+    <div class="process-step">
+      <span class="process-num">02</span>
+      <div><div class="process-label">Brute Force</div><div class="process-desc">What's the naive O(n²) approach? Say it out loud</div></div>
+    </div>
+    <div class="process-step">
+      <span class="process-num">03</span>
+      <div><div class="process-label">Spot Pattern</div><div class="process-desc">What's repeated/wasteful? That's where optimization lives</div></div>
+    </div>
+    <div class="process-step">
+      <span class="process-num">04</span>
+      <div><div class="process-label">Match Template</div><div class="process-desc">Two pointers? Sliding window? Map lookup? Match it</div></div>
+    </div>
+    <div class="process-step">
+      <span class="process-num">05</span>
+      <div><div class="process-label">Edge Cases</div><div class="process-desc">Empty, single element, negatives, overflow</div></div>
+    </div>
+    <div class="process-step">
+      <span class="process-num">06</span>
+      <div><div class="process-label">Code + Trace</div><div class="process-desc">Write code. Trace manually. Catch bugs before submitting</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN LAYOUT
+════════════════════════════════════════════ -->
+<div id="layout">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <button class="topic-btn active" data-topic="arrays">
+      <span class="topic-icon">▦</span>Arrays
+    </button>
+    <button class="topic-btn" data-topic="hashmap">
+      <span class="topic-icon">⟨⟩</span>HashMap
+    </button>
+    <button class="topic-btn" data-topic="linkedlist">
+      <span class="topic-icon">⬡→</span>Linked List
+    </button>
+    <button class="topic-btn" data-topic="recursion">
+      <span class="topic-icon">f(f)</span>Recursion
+    </button>
+    <button class="topic-btn" data-topic="bitmag">
+      <span class="topic-icon">01</span>Bit Magic
+    </button>
+
+    <div id="mantra-box">
+      <div id="mantra-title">MANTRA</div>
+      <div id="mantra-text">Draw it.<br>Name the pattern.<br>Write template.<br>Code it.</div>
+    </div>
+  </div>
+
+  <!-- CONTENT AREA -->
+  <div id="content">
+
+    <!-- TOPIC HEADER (dynamic) -->
+    <div id="topic-header">
+      <div id="topic-title-row">
+        <span id="topic-big-icon">▦</span>
+        <div>
+          <div id="topic-name">Arrays</div>
+          <div id="topic-tagline">"Master the sliding window. Own the two pointers."</div>
+        </div>
+      </div>
+      <div id="mindset-box">
+        <div id="mindset-title">🧠 MENTOR'S MINDSET</div>
+        <pre id="mindset-text"></pre>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div id="tabs">
+      <button class="tab-btn active" data-tab="patterns">Patterns</button>
+      <button class="tab-btn" data-tab="tricks">Tips &amp; Tricks</button>
+      <button class="tab-btn" data-tab="faang">FAANG Qs</button>
+    </div>
+
+    <!-- PATTERNS SECTION -->
+    <div id="sec-patterns" class="section visible">
+      <div class="section-hint">Click any pattern to expand → see visual, signal words &amp; Python template</div>
+      <div id="patterns-container"></div>
+    </div>
+
+    <!-- TRICKS SECTION -->
+    <div id="sec-tricks" class="section">
+      <div class="section-hint">Senior engineer level tricks — these separate good from great</div>
+      <div id="tricks-container"></div>
+      <div id="cheatsheet">
+        <div id="cheatsheet-title">⚡ PATTERN RECOGNITION CHEATSHEET</div>
+        <div id="cheat-grid">
+          <div class="cheat-item"><span class="cheat-signal">"Sorted array + pair"</span><span class="cheat-pattern">→ Two Pointers</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Subarray / window"</span><span class="cheat-pattern">→ Sliding Window</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Range sum queries"</span><span class="cheat-pattern">→ Prefix Sum</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Find complement"</span><span class="cheat-pattern">→ HashMap</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Tree traversal"</span><span class="cheat-pattern">→ DFS Recursion</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"All combinations"</span><span class="cheat-pattern">→ Backtracking</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Unique / missing"</span><span class="cheat-pattern">→ XOR Trick</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Overlapping subproblems"</span><span class="cheat-pattern">→ Memoization</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Next greater element"</span><span class="cheat-pattern">→ Monotonic Stack</span></div>
+          <div class="cheat-item"><span class="cheat-signal">"Level order traversal"</span><span class="cheat-pattern">→ BFS Queue</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAANG SECTION -->
+    <div id="sec-faang" class="section">
+      <div class="section-hint">Real FAANG interview questions — mapped to patterns you now know</div>
+      <div style="overflow-x:auto">
+        <table class="faang-table">
+          <thead><tr>
+            <th id="th-q">Problem</th>
+            <th id="th-p">Pattern</th>
+            <th id="th-h">Key Insight</th>
+          </tr></thead>
+          <tbody id="faang-tbody"></tbody>
+        </table>
+      </div>
+      <div id="interview-script">
+        <div id="script-title">📋 INTERVIEW SCRIPT — What to SAY during coding interviews</div>
+        <div class="script-row"><span class="script-step" id="ss1">1. Clarify</span><span class="script-line">"Can I assume the array is sorted?" "Can there be duplicates?" "What's the expected output for empty input?"</span></div>
+        <div class="script-row"><span class="script-step" id="ss2">2. Brute Force</span><span class="script-line">"Naive approach would be O(n²) — iterate all pairs. Let me optimize this."</span></div>
+        <div class="script-row"><span class="script-step" id="ss3">3. Optimize</span><span class="script-line">"I notice we're redoing work — if I use a HashMap / window / prefix sum, I can get O(n)."</span></div>
+        <div class="script-row"><span class="script-step" id="ss4">4. Code</span><span class="script-line">"Let me code this step by step. I'll handle edge cases at the end."</span></div>
+        <div class="script-row"><span class="script-step" id="ss5">5. Test</span><span class="script-line">"Let me trace through [2,7,11,15] with target=9... yes, returns [0,1]. Looks correct."</span></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /layout -->
+
+<!-- FOOTER -->
+<div id="footer">
+  <div id="footer-left">FAANG DSA DOJO · Built for Dev · Crack Google 🎯</div>
+  <div id="footer-right">
+    <span class="footer-step">1. Pattern</span>
+    <span class="footer-step">2. Visualize</span>
+    <span class="footer-step">3. Template</span>
+    <span class="footer-step">4. Code</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DATA + LOGIC
+════════════════════════════════════════════ -->
+<script>
+const TOPICS = {
+  arrays: {
+    color: '#0ff',
+    icon: '▦',
+    name: 'Arrays',
+    tagline: 'Master the sliding window. Own the two pointers.',
+    mindset: `Arrays are about POSITION and WINDOW. Ask yourself:
+• Do I need a subarray/subrange?    → Sliding Window
+• Do I need two elements?           → Two Pointers
+• Do I need prefix sums?            → Running total trick
+• Do I need sorted order?           → Sort first, then think`,
+    patterns: [
+      {
+        name: 'Two Pointers',
+        when: 'Sorted array, pair sum, remove duplicates, palindrome check',
+        signal: '"find pair", "sorted", "in-place", "O(1) space"',
+        visual: `←  [1, 2, 3, 4, 5, 6]  →
+ L               R`,
+        code: `left, right = 0, len(arr)-1
+while left < right:
+    if condition_met:
+        # process
+        left += 1; right -= 1
+    elif need_more:
+        left += 1
+    else:
+        right -= 1`
+      },
+      {
+        name: 'Sliding Window',
+        when: 'Subarray of size k, max/min subarray, longest substring',
+        signal: '"subarray", "contiguous", "window of size k", "longest"',
+        visual: `[→ 1  2  3 ←] 4  5  6   ← slide right →
+    WINDOW`,
+        code: `# Fixed window
+window_sum = sum(arr[:k])
+max_sum = window_sum
+for i in range(k, len(arr)):
+    window_sum += arr[i] - arr[i-k]
+    max_sum = max(max_sum, window_sum)`
+      },
+      {
+        name: 'Prefix Sum',
+        when: 'Sum of range queries, subarray sum = target',
+        signal: '"range sum", "sum equals k", multiple queries on same array',
+        visual: `arr:    [2,  3,  1,  4]
+prefix: [0, 2,  5,  6, 10]`,
+        code: `prefix = [0] * (len(arr)+1)
+for i, v in enumerate(arr):
+    prefix[i+1] = prefix[i] + v
+# range sum [l..r] = prefix[r+1] - prefix[l]`
+      },
+      {
+        name: "Kadane's Algorithm",
+        when: 'Maximum subarray sum',
+        signal: '"max sum contiguous subarray"',
+        visual: `[-2, 1, -3, 4, -1, 2, 1, -5, 4]
+             ↑__BEST WINDOW__↑`,
+        code: `max_sum = cur = arr[0]
+for n in arr[1:]:
+    cur = max(n, cur + n)
+    max_sum = max(max_sum, cur)`
+      }
+    ],
+    tricks: [
+      '🔥 Sort first when order doesn\'t matter — unlocks binary search + two pointers',
+      '🔥 Use index math: if arr[i] + arr[j] == target, think HashMap instead',
+      '🔥 Monotonic stack for "next greater element" problems',
+      '🔥 Dutch flag algorithm for 3-way partition (0s, 1s, 2s)',
+      '🔥 When asked for O(n) and O(1) space — think two passes'
+    ],
+    faang: [
+      { q: 'Two Sum', p: 'HashMap', h: 'Store complement' },
+      { q: 'Best Time to Buy Stock', p: "Kadane's variant", h: 'Track min so far' },
+      { q: 'Container With Most Water', p: 'Two Pointers', h: 'Move smaller side' },
+      { q: 'Subarray Sum = K', p: 'Prefix Sum + HashMap', h: 'prefix[j]-prefix[i]=k' },
+      { q: 'Longest Subarray without repeat', p: 'Sliding Window', h: 'Shrink from left' }
+    ]
+  },
+
+  hashmap: {
+    color: '#f0f',
+    icon: '⟨⟩',
+    name: 'HashMap',
+    tagline: 'Trade space for time. O(n) is the goal.',
+    mindset: `HashMap = MEMORY for O(1) lookup.
+Ask yourself:
+• Have I seen this before?          → HashSet
+• How many times did I see this?    → Counter / freq map
+• What's the complement/pair?       → Store target - x
+• Do I need to group by property?   → defaultdict(list)
+• Do I need insertion order?        → OrderedDict`,
+    patterns: [
+      {
+        name: 'Frequency Counter',
+        when: 'Anagrams, most frequent element, find duplicates',
+        signal: '"anagram", "frequency", "count occurrences", "duplicate"',
+        visual: `[a,b,a,c,b,a] → {a:3, b:2, c:1}`,
+        code: `from collections import Counter
+freq = Counter(arr)
+# or manually:
+freq = {}
+for x in arr:
+    freq[x] = freq.get(x, 0) + 1`
+      },
+      {
+        name: 'Two Sum Pattern',
+        when: 'Find pair with target, complement lookup',
+        signal: '"two numbers", "sum equals target", "pair"',
+        visual: `target=9
+[2,7,11,15]
+ x=2 → store {2:0}
+ x=7 → 9-7=2 ✓ FOUND!`,
+        code: `seen = {}
+for i, x in enumerate(arr):
+    complement = target - x
+    if complement in seen:
+        return [seen[complement], i]
+    seen[x] = i`
+      },
+      {
+        name: 'Group By Pattern',
+        when: 'Group anagrams, group by property',
+        signal: '"group", "categorize", "anagram groups"',
+        visual: `eat,tea,tan,ate,nat,bat
+→ (a,e,t):[eat,tea,ate]
+→ (a,n,t):[tan,nat]
+→ (a,b,t):[bat]`,
+        code: `from collections import defaultdict
+groups = defaultdict(list)
+for word in words:
+    key = tuple(sorted(word))  # canonical form
+    groups[key].append(word)`
+      },
+      {
+        name: 'Sliding Window + Map',
+        when: 'Longest substring with condition, minimum window substring',
+        signal: '"longest substring", "minimum window", "at most k distinct"',
+        visual: `s = "aabbc", k=2 distinct
+[aa] → ok
+[aab] → 3 distinct, shrink
+ [ab] → ok`,
+        code: `from collections import defaultdict
+window = defaultdict(int)
+left = 0
+for right in range(len(s)):
+    window[s[right]] += 1
+    while INVALID_CONDITION:
+        window[s[left]] -= 1
+        if window[s[left]] == 0:
+            del window[s[left]]
+        left += 1`
+      }
+    ],
+    tricks: [
+      '🔥 Counter(a) == Counter(b) checks anagram in one line',
+      '🔥 Use tuple(sorted(word)) as hashable key for grouping',
+      '🔥 For subarray sum = k: prefix_sum - k in map → found it',
+      '🔥 defaultdict(list) avoids KeyError, cleaner than .setdefault',
+      '🔥 Combine HashSet + sorting for "find missing number" patterns'
+    ],
+    faang: [
+      { q: 'Group Anagrams', p: 'Group By', h: 'sorted word as key' },
+      { q: 'Top K Frequent Elements', p: 'Freq + Heap/Bucket', h: 'Counter + heapq' },
+      { q: 'Longest Consecutive Sequence', p: 'HashSet', h: 'Only start from sequence head' },
+      { q: 'Minimum Window Substring', p: 'Sliding + Map', h: 'Shrink when valid' },
+      { q: '4Sum II', p: 'Two maps combined', h: 'Split into 2 pairs' }
+    ]
+  },
+
+  linkedlist: {
+    color: '#0f8',
+    icon: '⬡→',
+    name: 'Linked List',
+    tagline: 'Draw it. Pointer logic is visual. Never code without drawing.',
+    mindset: `RULE #1: ALWAYS draw the list before coding.
+Linked List = POINTER MANIPULATION
+Ask yourself:
+• Find middle / kth from end?  → Fast & Slow pointers
+• Detect cycle?                → Fast & Slow pointers
+• Reverse?                     → Three pointer technique (prev, curr, next)
+• Merge two lists?             → Dummy head trick
+• Need position from end?      → Two pointers with gap k`,
+    patterns: [
+      {
+        name: "Fast & Slow (Floyd's)",
+        when: 'Cycle detection, find middle, nth from end',
+        signal: '"cycle", "middle", "loop", "duplicate number"',
+        visual: `1→2→3→4→5→null
+       ↑ slow stops here (middle)
+fast moves 2x, slow moves 1x`,
+        code: `slow = fast = head
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+    if slow == fast:
+        return True  # cycle!
+# After loop: slow is at MIDDLE`
+      },
+      {
+        name: 'Reverse a Linked List',
+        when: 'Reverse entire list, reverse sublist, palindrome check',
+        signal: '"reverse", "palindrome linked list"',
+        visual: `None ← 1 ← 2 ← 3 ← 4
+ prev  curr
+   Step by step flip ↩`,
+        code: `prev, curr = None, head
+while curr:
+    next_node = curr.next  # save
+    curr.next = prev        # flip
+    prev = curr             # advance
+    curr = next_node        # advance
+return prev  # new head`
+      },
+      {
+        name: 'Dummy Head Trick',
+        when: 'Merge lists, delete node, add to front',
+        signal: '"merge", "delete", "insert", result list manipulation',
+        visual: `dummy→[0]→1→2→3→4
+          ↑ real head
+Dummy avoids edge case: empty list`,
+        code: `dummy = ListNode(0)
+dummy.next = head
+curr = dummy
+# ... build/modify list ...
+return dummy.next  # real head`
+      },
+      {
+        name: 'Two Pointer with Gap',
+        when: 'Nth node from end, remove nth from end',
+        signal: '"nth from end", "remove nth from end"',
+        visual: `n=2, list: 1→2→3→4→5
+right advances 2: points to 3
+both move till right=null
+left.next = 4 (to remove)`,
+        code: `dummy = ListNode(0, head)
+left, right = dummy, head
+# Move right n steps ahead
+for _ in range(n):
+    right = right.next
+# Move both until right ends
+while right:
+    left = left.next
+    right = right.next
+# left.next is the target
+left.next = left.next.next`
+      }
+    ],
+    tricks: [
+      '🔥 ALWAYS use a dummy head to avoid null-check edge cases',
+      '🔥 Draw arrows, not boxes. Pointer = arrow. Reverse the arrow mentally',
+      '🔥 After reversing, the NEW head is prev (not curr)',
+      '🔥 Fast pointer reaches end → slow pointer is at MIDDLE',
+      '🔥 For cycle start: after detection, reset one pointer to head, advance both by 1'
+    ],
+    faang: [
+      { q: 'Linked List Cycle II', p: "Floyd's + reset", h: 'Reset to head after meeting' },
+      { q: 'LRU Cache', p: 'Doubly LL + HashMap', h: 'O(1) get & put' },
+      { q: 'Merge K Sorted Lists', p: 'Dummy + MinHeap', h: 'heapq with (val, idx, node)' },
+      { q: 'Reverse Nodes in k-Group', p: 'Reverse sublist', h: 'Count k, reverse, recurse' },
+      { q: 'Palindrome Linked List', p: 'Fast/Slow + Reverse', h: 'Find mid, reverse 2nd half' }
+    ]
+  },
+
+  recursion: {
+    color: '#fa0',
+    icon: 'f(f)',
+    name: 'Recursion',
+    tagline: 'Trust the recursion. Define base case. Trust it handles the rest.',
+    mindset: `THE GOLDEN RULE OF RECURSION:
+"Assume your function already works for smaller inputs.
+ Just write what to do with the current input."
+
+3 Questions to crack any recursion:
+1. BASE CASE  — What's the smallest answer I know?
+2. TRUST      — If I call myself on smaller input, correct result?
+3. USE IT     — How do I combine that result with current step?
+
+Recursion patterns:
+• Tree problems        → almost always recursion
+• Divide & Conquer     → split in half recursively
+• Backtracking         → try all, undo, try next
+• Memoization          → cache recursive calls`,
+    patterns: [
+      {
+        name: 'Tree Recursion Template',
+        when: 'Any binary tree problem',
+        signal: '"binary tree", "depth", "path", "nodes", "subtree"',
+        visual: `       5          ← process LAST (post-order)
+      / \\
+     3   8         ← process children FIRST
+    / \\
+   2   4           ← base: None nodes return 0`,
+        code: `def solve(node):
+    # BASE CASE
+    if not node:
+        return base_value
+
+    # TRUST — recurse on children
+    left  = solve(node.left)
+    right = solve(node.right)
+
+    # USE — combine with current
+    return combine(node.val, left, right)`
+      },
+      {
+        name: 'Backtracking Template',
+        when: 'Subsets, permutations, combinations, N-Queens, Sudoku',
+        signal: '"all combinations", "generate all", "find all paths"',
+        visual: `          []
+       /  |  \\
+     [1] [2] [3]
+    / \\    \\
+ [1,2][1,3] [2,3]
+   |
+[1,2,3]`,
+        code: `def backtrack(start, current):
+    # BASE: add to results
+    result.append(current[:])
+
+    for i in range(start, len(nums)):
+        current.append(nums[i])   # CHOOSE
+        backtrack(i+1, current)   # EXPLORE
+        current.pop()             # UNCHOOSE ← KEY!
+
+result = []
+backtrack(0, [])`
+      },
+      {
+        name: 'Divide & Conquer',
+        when: 'Merge sort, quick sort, binary search, power(x,n)',
+        signal: '"sorted", "find in sorted", "median", "majority element"',
+        visual: `power(2, 8)
+→ power(2,4)²
+  → power(2,2)²
+    → power(2,1)²
+      → 2*2 = 4...`,
+        code: `def power(x, n):
+    if n == 0: return 1
+    if n < 0:  return 1/power(x, -n)
+    half = power(x, n//2)   # DIVIDE
+    if n % 2 == 0:
+        return half * half   # CONQUER even
+    else:
+        return half * half * x  # CONQUER odd`
+      },
+      {
+        name: 'Memoization (Top-Down DP)',
+        when: 'Overlapping subproblems: Fibonacci, climbing stairs, coin change',
+        signal: '"minimum ways", "number of ways", "optimal", repeated subproblems',
+        visual: `fib(5)
+├─fib(4)──────┐
+│  ├─fib(3)   fib(3)←CACHED!
+│  │  ├─fib(2)
+│  │  └─fib(1)`,
+        code: `from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def dp(n):
+    if n <= 1: return n       # BASE
+    return dp(n-1) + dp(n-2)  # TRUST + USE
+
+# Without decorator:
+memo = {}
+def dp(n):
+    if n in memo: return memo[n]
+    memo[n] = dp(n-1) + dp(n-2)
+    return memo[n]`
+      }
+    ],
+    tricks: [
+      '🔥 If recursion depth > 1000, Python hits limit — use sys.setrecursionlimit or convert to iterative',
+      '🔥 Draw the recursion TREE for any recursive function before coding',
+      '🔥 @lru_cache turns any recursive solution into memoized DP instantly',
+      '🔥 Backtracking = DFS + undo. Always append COPY of current (current[:])',
+      '🔥 For tree problems: think about what to return UP the tree, not just down'
+    ],
+    faang: [
+      { q: 'Subsets / Subsets II', p: 'Backtracking', h: 'Sort + skip duplicates' },
+      { q: 'Word Search', p: 'Backtracking on grid', h: 'DFS + visited set' },
+      { q: 'Validate BST', p: 'Tree recursion with bounds', h: 'Pass (min, max) down' },
+      { q: 'Coin Change', p: 'Memoization', h: 'dp(amount) = 1 + min(dp(amount-coin))' },
+      { q: 'Letter Combinations Phone', p: 'Backtracking', h: 'Map digits to letters' }
+    ]
+  },
+
+  bitmag: {
+    color: '#f44',
+    icon: '01',
+    name: 'Bit Magic',
+    tagline: 'Bit ops are O(1). They\'re interview gold.',
+    mindset: `MASTER THESE 6 OPERATIONS:
+AND  (&)  → keep only common bits  → mask, check, clear
+OR   (|)  → set a bit              → combine flags
+XOR  (^)  → toggle, find diff      → self-cancellation trick
+NOT  (~)  → flip all bits
+SHL  (<<) → multiply by 2
+SHR  (>>) → divide by 2
+
+THE GOLDEN PROPERTY OF XOR:
+  a ^ a = 0   (same number cancels)
+  a ^ 0 = a   (zero is identity)
+  XOR is commutative & associative
+
+USE THIS TO FIND: single number, missing number, swap without temp`,
+    patterns: [
+      {
+        name: 'XOR Self-Cancellation',
+        when: 'Find unique element, find missing number',
+        signal: '"appears once", "single number", "missing number", "two arrays differ"',
+        visual: `[1,2,1,3,3]
+0^1=1
+1^2=3
+3^1=2
+2^3=1
+1^3=2  ← answer!`,
+        code: `# Find single number (all others appear twice)
+result = 0
+for n in nums:
+    result ^= n
+return result
+# 1^1^2^3^3 = 0^2^0 = 2 ✓
+
+# Find missing in [1..n]
+expected = 0
+for i in range(1, n+1): expected ^= i
+for x in arr:           expected ^= x
+return expected`
+      },
+      {
+        name: 'Bit Masking',
+        when: 'Check if bit is set, set/clear a bit, count set bits',
+        signal: '"power of 2", "count bits", "subset using bitmask"',
+        visual: `n=12 = 1100
+n-1=11= 1011
+n&(n-1)=1000 (cleared one bit!)
+Repeat → count all 1s`,
+        code: `# Check if bit i is set
+(n >> i) & 1
+
+# Set bit i
+n | (1 << i)
+
+# Clear bit i
+n & ~(1 << i)
+
+# Count set bits (Brian Kernighan's)
+count = 0
+while n:
+    n &= n - 1   # removes lowest set bit
+    count += 1`
+      },
+      {
+        name: 'Power of 2 Check',
+        when: 'Is n a power of 2?',
+        signal: '"power of 2", "only one bit set"',
+        visual: `8  = 1 0 0 0
+7  = 0 1 1 1
+&  = 0 0 0 0  ← zero! Power of 2 ✓
+
+6  = 1 1 0
+5  = 1 0 1
+&  = 1 0 0  ← non-zero. Not power of 2`,
+        code: `# A power of 2 has exactly ONE bit set
+# n=8  → 1000
+# n-1=7→ 0111
+# n & (n-1) = 0 → power of 2!
+
+def is_power_of_two(n):
+    return n > 0 and (n & (n-1)) == 0`
+      },
+      {
+        name: 'Bitmask DP / Subsets',
+        when: 'Generate all subsets, state compression in DP',
+        signal: '"all subsets", "TSP", "assignment problem", small n (≤20)',
+        visual: `nums=[a,b,c], n=3
+mask=000→[]
+mask=001→[a]
+mask=010→[b]
+mask=011→[a,b]
+mask=100→[c]...`,
+        code: `# All subsets using bitmask
+n = len(nums)
+for mask in range(1 << n):       # 2^n subsets
+    subset = []
+    for i in range(n):
+        if mask & (1 << i):      # if bit i is set
+            subset.append(nums[i])
+    print(subset)`
+      }
+    ],
+    tricks: [
+      '🔥 n & (n-1) → removes lowest set bit. Used to count bits fast',
+      '🔥 n & (-n) → isolates lowest set bit only',
+      '🔥 XOR of 1 to n has a cycle: n, 1, n+1, 0 (period 4)',
+      '🔥 Left shift by 1 = multiply by 2. Right shift = floor divide by 2',
+      '🔥 a ^ b ^ b = a — XOR with same value twice returns original'
+    ],
+    faang: [
+      { q: 'Single Number', p: 'XOR all', h: 'result ^= n for all n' },
+      { q: 'Counting Bits', p: 'DP + bit trick', h: 'dp[i] = dp[i>>1] + (i&1)' },
+      { q: 'Missing Number', p: 'XOR or Gauss sum', h: 'n*(n+1)/2 - sum(arr)' },
+      { q: 'Reverse Bits', p: 'Bit masking + shift', h: 'Check LSB, shift result left' },
+      { q: 'Sum of Two Integers', p: 'XOR + AND carry', h: 'a^b = sum, (a&b)<<1 = carry' }
+    ]
+  }
+};
+
+// ─── STATE ───
+let activeTopic = 'arrays';
+let activeTab = 'patterns';
+
+// ─── COLOR UTILS ───
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+function glow(hex, px=8) {
+  return `0 0 ${px}px rgba(${hexToRgb(hex)},0.6)`;
+}
+
+// ─── RENDER ───
+function applyColor(color) {
+  const root = document.documentElement;
+  root.style.setProperty('--active-color', color);
+
+  document.getElementById('logo').style.background = `linear-gradient(90deg, ${color}, #fff)`;
+  document.getElementById('logo').style.webkitBackgroundClip = 'text';
+  document.getElementById('logo').style.backgroundClip = 'text';
+  document.getElementById('logo').style.webkitTextFillColor = 'transparent';
+
+  document.getElementById('mode-badge').style.borderColor = color + '66';
+  document.getElementById('mode-badge').style.color = color;
+  document.getElementById('mode-badge').style.boxShadow = glow(color,5);
+
+  document.getElementById('topic-name').style.color = color;
+  document.getElementById('topic-name').style.textShadow = glow(color,14);
+
+  document.getElementById('mindset-box').style.borderColor = color + '33';
+  document.getElementById('mindset-title').style.color = color;
+
+  document.getElementById('cheatsheet').style.borderColor = color + '44';
+  document.getElementById('cheatsheet-title').style.color = color;
+
+  // cheat-pattern colors
+  document.querySelectorAll('.cheat-pattern').forEach(el => el.style.color = color);
+
+  // table headers
+  ['th-q','th-p','th-h'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.style.color = color; el.style.borderBottomColor = color+'44'; }
+  });
+  document.querySelectorAll('.td-pat').forEach(el => el.style.color = color);
+
+  // script steps
+  ['ss1','ss2','ss3','ss4','ss5'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.color = color;
+  });
+
+  // active tab
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if(btn.classList.contains('active')) {
+      btn.style.borderColor = color;
+      btn.style.background = color + '18';
+      btn.style.color = color;
+      btn.style.boxShadow = glow(color,4);
+    } else {
+      btn.style.borderColor = '#222';
+      btn.style.background = 'transparent';
+      btn.style.color = '#444';
+      btn.style.boxShadow = 'none';
+    }
+  });
+
+  // process steps hover color via process-num
+  document.querySelectorAll('.process-num').forEach(el => el.style.color = color);
+
+  // sidebar active
+  document.querySelectorAll('.topic-btn').forEach(btn => {
+    const isActive = btn.dataset.topic === activeTopic;
+    btn.style.borderLeftColor = isActive ? color : 'transparent';
+    btn.style.color = isActive ? color : '#3a3a3a';
+    btn.style.background = isActive ? '#0d0d0d' : 'transparent';
+    btn.style.fontWeight = isActive ? '600' : '400';
+  });
+
+  // pattern cards
+  document.querySelectorAll('.pattern-card').forEach(card => {
+    card.style.borderLeftColor = color;
+    if(card.classList.contains('open')) {
+      card.style.boxShadow = glow(color,6);
+    } else {
+      card.style.boxShadow = 'none';
+    }
+  });
+  document.querySelectorAll('.pattern-name').forEach(el => el.style.color = color);
+
+  // trick items hover color set
+  document.querySelectorAll('.trick-item').forEach(el => {
+    el.style.borderColor = 'transparent';
+    el.onmouseenter = () => el.style.borderColor = color + '44';
+    el.onmouseleave = () => el.style.borderColor = 'transparent';
+  });
+}
+
+function renderTopic(topicKey) {
+  const t = TOPICS[topicKey];
+  const color = t.color;
+
+  // mode badge
+  document.getElementById('mode-badge').textContent = t.name.toUpperCase() + ' MODE';
+
+  // topic header
+  document.getElementById('topic-big-icon').textContent = t.icon;
+  document.getElementById('topic-name').textContent = t.name;
+  document.getElementById('topic-tagline').textContent = '"' + t.tagline + '"';
+  document.getElementById('mindset-title').textContent = '🧠 MENTOR\'S MINDSET — How to THINK about ' + t.name;
+  document.getElementById('mindset-text').textContent = t.mindset;
+
+  // patterns
+  const pc = document.getElementById('patterns-container');
+  pc.innerHTML = '';
+  t.patterns.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'pattern-card fade-in';
+    card.style.animationDelay = (i * 60) + 'ms';
+    card.innerHTML = `
+      <div class="pattern-card-header">
+        <div>
+          <div class="pattern-name">${p.name}</div>
+          <div class="pattern-when">WHEN: ${p.when}</div>
+        </div>
+        <span class="card-arrow">▼</span>
+      </div>
+      <div class="pattern-body">
+        <div class="signal-box">
+          <div class="signal-label">🎯 SIGNAL WORDS</div>
+          <div class="signal-text">${p.signal}</div>
+        </div>
+        <div class="visual-box">
+          <div class="visual-label">VISUAL</div>
+          <pre class="visual-pre">${p.visual}</pre>
+        </div>
+        <div class="code-box">
+          <div class="code-label">PYTHON TEMPLATE</div>
+          <pre class="code-pre">${p.code}</pre>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => {
+      const isOpen = card.classList.contains('open');
+      card.classList.toggle('open');
+      card.style.boxShadow = isOpen ? 'none' : glow(color,6);
+      applyColor(color); // refresh colors
+    });
+    pc.appendChild(card);
+  });
+
+  // tricks
+  const tc = document.getElementById('tricks-container');
+  tc.innerHTML = '';
+  t.tricks.forEach((trick, i) => {
+    const el = document.createElement('div');
+    el.className = 'trick-item fade-in';
+    el.style.animationDelay = (i * 50) + 'ms';
+    el.textContent = trick;
+    tc.appendChild(el);
+  });
+
+  // faang table
+  const tbody = document.getElementById('faang-tbody');
+  tbody.innerHTML = '';
+  t.faang.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="td-q">${row.q}</td>
+      <td class="td-pat">${row.p}</td>
+      <td class="td-hint">${row.h}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  applyColor(color);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.getElementById('sec-' + tab).classList.add('visible');
+  document.getElementById('sec-' + tab).classList.add('fade-in');
+  setTimeout(() => document.getElementById('sec-' + tab).classList.remove('fade-in'), 300);
+  applyColor(TOPICS[activeTopic].color);
+}
+
+// ─── EVENTS ───
+document.querySelectorAll('.topic-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeTopic = btn.dataset.topic;
+    renderTopic(activeTopic);
+    // reset to patterns tab
+    activeTab = 'patterns';
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    switchTab('patterns');
+  });
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    switchTab(btn.dataset.tab);
+  });
+});
+
+// ─── INIT ───
+renderTopic('arrays');
+switchTab('patterns');
+</script>
+</body>
+</html>
