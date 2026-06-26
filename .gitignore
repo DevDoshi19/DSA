@@ -64,3 +64,5 @@ coverage.xml
 *.swp
 *.swo
 .DS_Store
+
+claude/
