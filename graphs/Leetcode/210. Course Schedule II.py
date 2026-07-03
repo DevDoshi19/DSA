@@ -55,7 +55,7 @@ class Solution:
         return []
     
 # using DFS 
-class Solution:
+class Solution1:
     
     def dfs(self,current_node,visited,adj_list,stack):
         visited[current_node] = 2
@@ -65,7 +65,7 @@ class Solution:
 
             if visited[adjNode] == 0:
                 ans = self.dfs(adjNode,visited,adj_list,stack)
-                if ans == False :
+                if ans is False :
                     return False 
 
         visited[current_node] = 1
