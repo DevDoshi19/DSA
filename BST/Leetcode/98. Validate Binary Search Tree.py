@@ -3,7 +3,7 @@
 # Solution link is above 
 
 # Definition for a binary tree node.
-from BST.Morris_algorith_FOR_IO_PO_traversal import Optional
+from BST.Leetcode.Morris_algorith_FOR_IO_PO_traversal import Optional
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
