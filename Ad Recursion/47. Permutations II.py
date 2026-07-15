@@ -12,7 +12,7 @@ class Solution:
             for i in range(len(nums)):
                 if i>0 and nums[i] == nums[i-1] and not used[i-1] :
                     continue
-                elif used[i] == True :
+                elif used[i] is True :
                     continue
                 else:
                     used[i] = True
@@ -24,3 +24,7 @@ class Solution:
 
         backtrack([])
         return result
+    
+nums = [1,2,2,3]
+s = Solution()
+print(s.permuteUnique(nums))

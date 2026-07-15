@@ -25,3 +25,6 @@ class Solution:
 
         return result
 
+nums = [1,2,3]
+s = Solution()
+print(s.permute(nums))
