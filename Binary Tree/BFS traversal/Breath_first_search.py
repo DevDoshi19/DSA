@@ -16,6 +16,7 @@ class Node :
 # 1. we create a queue and add the root node to it
 # 2. we pop the first element from the queue and add its left and right children
 # 3. we repeat step 2 until the queue is empty
+
 """
 example : dry run of the algorithm on the following tree :
 queue : []
