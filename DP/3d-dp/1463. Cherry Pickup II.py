@@ -1,5 +1,8 @@
 from typing import List
 
+# T.C. O(9^n) s.c. = O(n) for recursion
+# for dp t.c. = O(n*m*m*9) s.c. = O(n*m*m)
+
 class Solution:
     def cherryPickup(self, grid: List[List[int]]) -> int:
         r = len(grid) 
@@ -33,7 +36,8 @@ class Solution:
 
         dp =[[[float("-inf") for _ in range(c)] for _ in range(c)] for _ in range(r)]
         return backtrack(0,0,c-1,dp)
-    
+
+# t.c. = O()    
 class Solution2:
     def cherryPickup(self, grid: List[List[int]]) -> int:
         r = len(grid) 
