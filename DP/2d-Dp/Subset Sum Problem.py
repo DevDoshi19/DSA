@@ -87,4 +87,32 @@ class Solution1_1:
         if backtrack(0,0,dp):
             return True
         return False 
+
+# easy and better solution (Tabulation) 
+class Solution3:
+    def isSubsetSum (self, arr, sum):
+        # code here 
+        n = len(arr)
+        dp = [[False for _ in range(sum+1)]for _ in range(n)]
+        
+        for i in range(n):
+            dp[i][0] = True
+       
+        if arr[0] <= sum :
+            dp[0][arr[0]] = True
+           
+        for index in range(1,n):
+            for total in range(0,sum+1):
+                if arr[index] > total :
+                    pick = False
+                else :
+                    pick = dp[index-1][total-arr[index]]
+                
+                not_pick = dp[index-1][total]
+                
+                dp[index][total] = pick or not_pick 
+                
+        return dp[n-1][sum]
     
+# T.c. = O(n*target)
+# S.c. = O(2* target) ~ O(target)

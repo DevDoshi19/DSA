@@ -4,7 +4,11 @@ class Solution:
             return False
 
         stack = []
-        mapping = {')':'(', '}':'{',']':'['}
+        mapping = {
+            ')':'(', 
+            '}':'{',
+            ']':'['
+            }
 
         for char in s :
             if char in mapping.values() :
