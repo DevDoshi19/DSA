@@ -1,9 +1,7 @@
 class Solution:
     def bellmanFord(self, V, edges, src):
-        #code here
             
         dist = [10**8 for _ in range(V)]
-        
         dist[src] = 0 
         
         for _ in range(1,V):

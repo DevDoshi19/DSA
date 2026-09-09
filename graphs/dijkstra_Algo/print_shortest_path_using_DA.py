@@ -9,7 +9,7 @@ class Solution:
             adj_list[v].append([u,d])
 
         priority_queue = [[0,1]]
-
+        print(adj_list)
         distance = [sys.maxsize for _ in range(n+1)]
         parent = [i for i in range(n+1)]
         distance[1] = 0
@@ -34,7 +34,7 @@ class Solution:
 
         path = []
         node = n
-
+        print(parent)
         #  O(V)
         while parent[node] != node :
             path.append(node)

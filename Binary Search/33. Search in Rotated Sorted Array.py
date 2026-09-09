@@ -1,5 +1,14 @@
 from typing import List
 class Solution:
+    # check if the array is rotated or not and then apply binary search
+    """
+    step 1 : identify the sorted part of the array
+    step 2 : check if the target is in the sorted part or not
+    step 3 : if the target is in the sorted part then apply binary search on that part
+    step 4 : if the target is not in the sorted part then apply binary search on the other part
+    step 5 : if the target is not found then return -1
+    """
+    
     def search(self, nums: List[int], target: int) -> int:
         n = len(nums)
         left,right =0,n-1
