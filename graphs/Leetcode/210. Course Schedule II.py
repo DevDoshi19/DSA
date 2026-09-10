@@ -20,8 +20,6 @@ To succeed with this problem, you must always look out for three common pitfalls
 * The Catch: Some courses have absolutely no prerequisites, or the graph is split into separate, independent clusters.
 * The Fix: Ensure your initial loop checks every single course from 0 to numCourses - 1 to find all starting points with 0 in-degree. Do not just loop through the pairs present in the input array.
 
-Would you like me to show you an example input with a cycle to see exactly how the corrected code handles it?
-
 
 """
 
