@@ -1,4 +1,4 @@
-
+# GFG : https://practice.geeksforgeeks.org/problems/reverse-a-doubly-linked-list/1
 class Node:
     def __init__(self, val):
         self.data = val

@@ -8,7 +8,7 @@ class Solution:
 
             # Leaf node check
             if not node.left and not node.right:
-                return total == targetSum  # ✅
+                return total == targetSum  # 
 
             if node.left and dfs(node.left, total):
                 return True
