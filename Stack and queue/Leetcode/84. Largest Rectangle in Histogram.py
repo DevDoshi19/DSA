@@ -1,4 +1,23 @@
 class Solution:
+
+    """
+    Pattern recognition:
+    Observation                   -   Action
+    Current height is larger      -   Push it
+    Current height is equal       -   Can merge/update starting position
+    Current height is smaller     -   Pop taller bars and calculate areas
+    End of array                  -   Process remaining bars
+
+    1.What am I maximizing? Height × width.
+    2.What limits a rectangle? A smaller bar on either side.
+    3.When do I discover the right limit? When a smaller bar arrives.
+    4.Can I process bars only once? Yes, using a monotonic stack.
+    5.What is the time complexity? O(n).
+    6.What is the space complexity? O(n).
+    7.What must I remember? Height and the earliest index it can extend from.
+    
+    """
+
     def largestRectangleArea(self, heights: list[int]) -> int:
         stack = []
         max_area = 0
