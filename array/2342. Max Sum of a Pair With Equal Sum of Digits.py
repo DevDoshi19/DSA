@@ -37,3 +37,22 @@ class Solution:
                 digit_sum[total] = num
 
         return result
+
+class Solution2:
+    def maximumSum(self, nums: list[int]) -> int:
+        # approch 2 - constant space ( highest sum = 81 ( 10**9 = 9+9+9+...+9 (9 times) = 81)) 
+        n = len(nums)
+        digit_sum = [0] * 82
+        result = -1
+        for i in range(n):
+            j = nums[i]
+            total = sum(int(d) for d in str(j))
+
+            if digit_sum[total] != 0 :
+                result = max(result,digit_sum[total] + nums[i])
+                digit_sum[total]= max(digit_sum[total],nums[i])
+            else:
+                digit_sum[total] = nums[i]
+                
+
+        return result
