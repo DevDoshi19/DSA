@@ -36,3 +36,19 @@ class Solution3:
             newword.append(word)
     
         return " ".join(newword[::-1])
+
+        """
+        # instend of join we can also use below approach to get the result
+
+        result = ""
+        for word in newword[::-1]:
+            if result == "":
+                # First word doesn't get a leading space
+                result += word
+            else:
+                # Every subsequent word gets a space attached first
+                result += " " + word
+                
+        return result
+
+        """
