@@ -1,3 +1,4 @@
+# transform a relationship between two elements into a condition where their calculated values are equal, then use a frequency map.
 class Solution:
     
     # count the number of good pairs in the array
