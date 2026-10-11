@@ -1,5 +1,9 @@
 from collections import Counter
+"""
+Time: O(n + klog k) due to frequency counting and sorting.
+Space: O(k) for the frequency maps and sorted frequency lists.
 
+"""
 
 class Solution:
     def closeStrings(self, word1: str, word2: str) -> bool:
