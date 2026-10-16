@@ -28,7 +28,7 @@ class Solution:
 
         return ans
     
-# Alternative Optimal Approach (Negative Marking) 
+# Alternative Optimal Approach (Negative Marking)  negative indexing 
 class Solution2:
     def findDuplicates(self, nums: list[int]) -> list[int]:
         ans = []
