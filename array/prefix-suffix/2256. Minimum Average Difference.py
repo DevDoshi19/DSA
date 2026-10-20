@@ -67,3 +67,40 @@ class Solution:
 - Time: O(n) — building both arrays and scanning all positions.
 - Auxiliary space: O(n) — the prefix and suffix arrays.
 """
+
+# Approach 2: Using only one pass and constant space
+class Solution2:
+    def minimumAverageDifference(self, nums: list[int]) -> int:
+        n = len(nums)
+        total_sum = sum(nums)
+        
+        left_sum = 0
+        min_diff = float("inf")
+        best_index = 0
+        
+        for i, num in enumerate(nums):
+            left_sum += num
+            
+            # Calculate the left average
+            left_avg = left_sum // (i + 1)
+            
+            # Calculate the right average (handle the last element carefully)
+            if i == n - 1:
+                right_avg = 0
+            else:
+                right_sum = total_sum - left_sum
+                right_avg = right_sum // (n - 1 - i)
+            
+            # Find the absolute difference
+            abs_diff = abs(left_avg - right_avg)
+            
+            # Track the minimum difference and its smallest index
+            if abs_diff < min_diff:
+                min_diff = abs_diff
+                best_index = i
+                
+        return best_index
+
+# Complexity
+# - Time: O(n) — single pass through the array.
+# - Auxiliary space: O(1) — only a few variables are used.
