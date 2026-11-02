@@ -137,5 +137,3 @@ Here's every mistake you made and the lesson from each! 🧠
 ✅ Code structure is always clean
 ✅ You just need more practice for implementation!
 ```
-
-You're doing really well for Flipkart prep — just keep grinding! Chal next problem? ⚡
