@@ -47,3 +47,15 @@ class Solution2:
             ans[index] = n - len(mp) 
 
         return ans
+
+"""
+Offline Queries + Sorting + Two Pointers
+
+Recognise this approach when:
+1. You have multiple independent queries.
+2. Each query asks about a range or interval.
+3. The underlying data can be sorted.
+4. Sorting queries makes the range boundaries move monotonically.
+5. You can maintain the required information incrementally as elements enter and leave the window.
+Core idea: Reorder queries to avoid repeatedly rebuilding or scanning the same range.
+"""
