@@ -137,3 +137,11 @@ Here's every mistake you made and the lesson from each! 🧠
 ✅ Code structure is always clean
 ✅ You just need more practice for implementation!
 ```
+Pre-coding checklist :
+
+[ ] I can explain exactly what the problem asks.
+[ ] I have identified the important conditions and constraints.
+[ ] I know what each data structure stores and why.
+[ ] I have clearly defined my variables and what they represent.
+[ ] I have considered boundary cases before coding.
+[ ] I know what the function must return.

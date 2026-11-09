@@ -42,3 +42,19 @@ class Solution:
             for server_id, count in mp.items()
             if count == maxi
         ]
+
+
+"""
+Operation	                        Complexity
+
+Initialize SortedList	            O(k log k)
+Release busy servers	            O(n log k) total
+Find next available server	        O(log k) per request
+Remove/add available server	        O(log k)
+Update frequency map	            O(1) average
+Find busiest servers	            O(k)
+
+Overall time: O((n+k)log k)
+
+Auxiliary space: O(k), excluding the output.
+"""
