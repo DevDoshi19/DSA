@@ -54,7 +54,7 @@ Constraints:
 -1000 <= nums[i] <= 1000
 """
 class Solution:
-    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:
+    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:  # noqa: E741
         # mini_sum = float("inf")
         # curr_sum = 0
         # for i in range(l):
@@ -97,7 +97,7 @@ class Solution:
         return mini_sum if mini_sum != float("inf") else -1
 
 class Solution2:
-    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:
+    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:  # noqa: E741
         # new approach - brute force  
         mini = float("inf")
         n = len(nums)
@@ -112,7 +112,7 @@ class Solution2:
         return mini if mini != float("inf") else -1
 
 class Solution3:
-    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:
+    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:  # noqa: E741
         mini = float("inf")
         n = len(nums)
         prefix = [0] * n
