@@ -45,3 +45,30 @@ Time	O(N)
 Auxiliary space	O(W)
 Worst-case space	O(N)
 """
+# dfs approach 
+class Solution2:
+    def widthOfBinaryTree(self, root: TreeNode | None) -> int:
+        if not root:
+            return 0
+
+        leftmost = {}
+        max_width = 0
+
+        def dfs(node, depth, index):
+            nonlocal max_width
+
+            if not node:
+                return
+
+            if depth not in leftmost:
+                leftmost[depth] = index
+
+            width = index - leftmost[depth] + 1
+            max_width = max(max_width, width)
+
+            dfs(node.left, depth + 1, 2 * index)
+            dfs(node.right, depth + 1, 2 * index + 1)
+
+        dfs(root, 0, 0)
+
+        return max_width
