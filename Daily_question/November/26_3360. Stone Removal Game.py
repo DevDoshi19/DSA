@@ -1,3 +1,4 @@
+
 class Solution:
     def canAliceWin(self, n: int) -> bool: 
         # value = 10 
@@ -28,5 +29,16 @@ class Solution:
                 return i % 2 == 0
 
             value -= 1
+
+        return False
+    
+class Solution3:
+    def canAliceWin(self, n: int) -> bool:
+        # approach 3
+        for i in range(10, 0, -1):
+            if n < i:
+                return i % 2 == 0
+
+            n -= i
 
         return False
